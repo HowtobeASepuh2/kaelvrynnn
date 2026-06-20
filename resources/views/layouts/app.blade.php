@@ -48,17 +48,6 @@
     @stack('styles')
 </head>
 
-<script>
-    const backToTop = document.getElementById('back-to-top');
-    window.addEventListener('scroll', function () {
-        if (window.scrollY > 400) {
-            backToTop.style.display = 'flex';
-        } else {
-            backToTop.style.display = 'none';
-        }
-    });
-</script>
-
 <body class="bg-[#0a0e1a] text-slate-200 grid-pattern">
 
     {{-- Page Loader --}}

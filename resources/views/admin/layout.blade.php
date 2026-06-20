@@ -156,20 +156,20 @@
            class="sidebar-link {{ request()->routeIs('admin.experiences.*') ? 'active' : '' }}">
             <i class="fas fa-clock"></i> Experience
         </a>
+        @php $unread = \App\Models\ContactMessage::where('is_read', false)->count(); @endphp
         <a href="{{ route('admin.messages.index') }}"
            class="sidebar-link {{ request()->routeIs('admin.messages.*') ? 'active' : '' }}">
             <i class="fas fa-envelope"></i> Pesan
-            @php $uncommented = \App\Models\Comment::whereNull('reply')->count(); @endphp
-<a href="{{ route('admin.comments.index') }}"
-   class="sidebar-link {{ request()->routeIs('admin.comments.*') ? 'active' : '' }}">
-    <i class="fas fa-comments"></i> Komentar
-    @if($uncommented > 0)
-    <span class="badge badge-cyan" style="margin-left:auto;">{{ $uncommented }}</span>
-    @endif
-</a>
-            @php $unread = \App\Models\ContactMessage::where('is_read', false)->count(); @endphp
             @if($unread > 0)
             <span class="badge badge-red" style="margin-left:auto;">{{ $unread }}</span>
+            @endif
+        </a>
+        @php $uncommented = \App\Models\Comment::whereNull('reply')->where('is_admin', false)->count(); @endphp
+        <a href="{{ route('admin.comments.index') }}"
+           class="sidebar-link {{ request()->routeIs('admin.comments.*') ? 'active' : '' }}">
+            <i class="fas fa-comments"></i> Komentar
+            @if($uncommented > 0)
+            <span class="badge badge-cyan" style="margin-left:auto;">{{ $uncommented }}</span>
             @endif
         </a>
         <a href="{{ route('admin.profile.edit') }}"

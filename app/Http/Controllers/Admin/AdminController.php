@@ -4,61 +4,57 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Comment;
-use App\Models\Profile;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Project;
+use App\Models\Skill;
+use App\Models\Experience;
+use App\Models\ContactMessage;
 
-class CommentAdminController extends Controller
+class AdminController extends Controller
 {
-    public function index()
+    public function loginForm()
     {
-        $comments = Comment::latest()->get();
-        $profile  = Profile::first();
-        return view('admin.comments.index', compact('comments', 'profile'));
+        if (Auth::check()) {
+            return redirect()->route('admin.dashboard');
+        }
+        return view('admin.login');
     }
 
-    public function store(Request $request)
+    public function login(Request $request)
     {
         $request->validate([
-            'body' => 'required|string|min:3|max:1000',
+            'email'    => 'required|email',
+            'password' => 'required',
         ]);
 
-        $profile = Profile::first();
+        if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->route('admin.dashboard');
+        }
 
-        Comment::create([
-            'name'       => $profile->name ?? 'Wisnu Nugroho',
-            'email'      => $profile->email ?? 'admin@portofolio.com',
-            'body'       => $request->body,
-            'is_admin'   => true,
-            'is_approved'=> true,
-        ]);
-
-        return back()->with('success', 'Komentar berhasil dikirim!');
+        return back()->withErrors(['email' => 'Email atau password salah.']);
     }
 
-    public function reply(Request $request, $id)
+    public function logout(Request $request)
     {
-        $request->validate([
-            'reply' => 'required|string|min:3|max:1000',
-        ]);
-
-        Comment::findOrFail($id)->update([
-            'reply'      => $request->reply,
-            'replied_at' => now(),
-        ]);
-
-        return back()->with('success', 'Balasan berhasil dikirim!');
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('admin.login');
     }
 
-    public function approve($id)
+    public function dashboard()
     {
-        $comment = Comment::findOrFail($id);
-        $comment->update(['is_approved' => !$comment->is_approved]);
-        return back()->with('success', 'Status komentar diperbarui.');
-    }
+        $stats = [
+            'projects' => Project::count(),
+            'skills'   => Skill::count(),
+            'messages' => ContactMessage::count(),
+            'unread'   => ContactMessage::where('is_read', false)->count(),
+        ];
 
-    public function destroy($id)
-    {
-        Comment::findOrFail($id)->delete();
-        return back()->with('success', 'Komentar berhasil dihapus.');
+        $recentMessages = ContactMessage::latest()->take(5)->get();
+        $recentProjects = Project::with('category')->latest()->take(5)->get();
+
+        return view('admin.dashboard', compact('stats', 'recentMessages', 'recentProjects'));
     }
 }
