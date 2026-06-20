@@ -1,57 +1,43 @@
-FROM php:8.2-fpm
+FROM php:8.2-cli
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
     zip \
     unzip \
-    nginx \
     nodejs \
-    npm
-
-# Install PHP extensions including GD
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    npm \
+    && docker-php-ext-configure gd \
+        --with-freetype \
+        --with-jpeg \
     && docker-php-ext-install \
         pdo_mysql \
         mbstring \
         exif \
-        pcntl \
         bcmath \
         gd \
         zip \
-        xml
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory
-WORKDIR /var/www
+WORKDIR /app
 
-# Copy project files
 COPY . .
 
-# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Install Node dependencies and build assets
 RUN npm install && npm run build
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
-
-# Copy nginx config
-COPY docker/nginx.conf /etc/nginx/sites-available/default
-
-# Start script
-COPY docker/start.sh /start.sh
-RUN chmod +x /start.sh
+RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8080
 
-CMD ["/start.sh"]
+CMD php artisan migrate --force && php artisan storage:link && php artisan config:cache && php artisan serve --host=0.0.0.0 --port=8080
