@@ -32,7 +32,7 @@
             @csrf
             <div style="margin-bottom:1rem;">
                 <label style="display:block; font-size:0.875rem; color:#94a3b8; margin-bottom:0.375rem;">Email</label>
-                <input type="email" name="email" value="{{ old('email') }}" placeholder="admin@portofolio.com" required
+                <input type="email" name="email" value="{{ old('email') }}" placeholder="nama@email.com" required
                     style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:0.5rem; padding:0.625rem 0.875rem; color:#e2e8f0; font-size:0.875rem; outline:none; box-sizing:border-box;">
             </div>
             <div style="margin-bottom:1.5rem;">
@@ -44,10 +44,6 @@
                 <i class="fas fa-sign-in-alt" style="margin-right:0.5rem;"></i>Masuk
             </button>
         </form>
-
-        <p style="text-align:center; margin-top:1.5rem; font-size:0.8rem; color:#475569;">
-            Default: admin@portofolio.com / admin123
-        </p>
     </div>
 </div>
 </body>
