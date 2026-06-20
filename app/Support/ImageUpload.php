@@ -30,11 +30,9 @@ class ImageUpload
             return;
         }
 
-        // Extract public_id dari URL Cloudinary
-        preg_match('/\/portofolio-wisnu\/.+\/([^\.]+)/', $url, $matches);
-        if (!empty($matches[0])) {
-            $publicId = ltrim($matches[0], '/');
-            Cloudinary::destroy($publicId);
+        // Extract public_id dari URL Cloudinary secure_url.
+        if (preg_match('/\/upload\/(?:v\d+\/)?(.+?)(?:\.[a-zA-Z0-9]+)?$/', $url, $matches)) {
+            Cloudinary::uploadApi()->destroy($matches[1]);
         }
     }
 
