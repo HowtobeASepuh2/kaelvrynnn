@@ -10,9 +10,7 @@ class ImageUpload
 {
     public static function store(UploadedFile $file, string $directory, int $maxWidth = 1600): string
     {
-        $publicId = trim($directory, '/') . '/' . Str::uuid();
-
-        $result = Cloudinary::upload($file->getRealPath(), [
+        $result = Cloudinary::uploadApi()->upload($file->getRealPath(), [
             'folder'         => 'portofolio-wisnu/' . trim($directory, '/'),
             'public_id'      => Str::uuid(),
             'transformation' => [
@@ -23,7 +21,7 @@ class ImageUpload
             ],
         ]);
 
-        return $result->getSecurePath();
+        return $result['secure_url'];
     }
 
     public static function delete(string $url): void
