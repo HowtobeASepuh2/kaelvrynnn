@@ -17,8 +17,9 @@
                         <div class="w-32 h-32 mx-auto rounded-2xl mb-6 shadow-xl shadow-purple-500/20 overflow-hidden">
     @if($profile && $profile->photo)
         <img src="{{ Storage::url($profile->photo) }}"
-             alt="{{ $profile->name }}"
-             class="w-full h-full object-cover">
+        alt="{{ $profile->name }}"
+        class="w-full h-full"
+        style="object-fit:cover; object-position:center top;">
     @else
         <div class="w-full h-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white text-4xl font-bold">
             {{ strtoupper(substr($profile->name ?? 'WN', 0, 2)) }}
