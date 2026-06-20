@@ -87,7 +87,13 @@ class CommentAdminController extends Controller
 
     public function destroy($id)
     {
-        Comment::findOrFail($id)->delete();
+        $comment = Comment::findOrFail($id);
+
+        if ($comment->avatar) {
+            ImageUpload::delete($comment->avatar);
+        }
+
+        $comment->delete();
 
         return back()->with('success', 'Komentar berhasil dihapus.');
     }

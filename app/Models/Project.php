@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\ImageUpload;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -21,6 +22,21 @@ class Project extends Model
         'is_featured' => 'boolean',
         'is_published' => 'boolean',
     ];
+
+    protected static function booted(): void
+    {
+        static::deleting(function (Project $project) {
+            if ($project->thumbnail) {
+                ImageUpload::delete($project->thumbnail);
+            }
+
+            if ($project->og_image) {
+                ImageUpload::delete($project->og_image);
+            }
+
+            $project->images()->get()->each->delete();
+        });
+    }
 
     public function getSlugOptions(): SlugOptions
     {

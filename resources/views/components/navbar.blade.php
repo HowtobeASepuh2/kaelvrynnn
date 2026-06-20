@@ -8,7 +8,7 @@
     {{-- Foto kecil di navbar --}}
     <div style="width:2rem; height:2rem; border-radius:0.5rem; overflow:hidden; border:1px solid rgba(6,182,212,0.3); flex-shrink:0;">
         @if($navProfile && $navProfile->photo)
-            <img src="{{ Storage::url($navProfile->photo) }}"
+            <img src="{{ \App\Support\ImageUpload::url($navProfile->photo) }}"
                  alt="{{ $navProfile->name }}"
                  style="width:100%; height:100%; object-fit:cover;">
         @else

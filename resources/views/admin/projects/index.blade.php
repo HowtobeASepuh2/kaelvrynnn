@@ -63,7 +63,7 @@
                     <div style="display:flex; align-items:center; gap:0.75rem;">
                         <div style="width:2.5rem; height:2.5rem; border-radius:0.5rem; background:rgba(255,255,255,0.05); overflow:hidden; flex-shrink:0;">
                             @if($project->thumbnail)
-                            <img src="{{ Storage::url($project->thumbnail) }}" style="width:100%; height:100%; object-fit:cover;">
+                            <img src="{{ \App\Support\ImageUpload::url($project->thumbnail) }}" style="width:100%; height:100%; object-fit:cover;">
                             @else
                             <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
                                 <i class="fas fa-image" style="color:#475569; font-size:0.75rem;"></i>

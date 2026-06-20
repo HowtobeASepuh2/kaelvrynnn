@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\ImageUpload;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -18,6 +19,15 @@ class Article extends Model
         'is_published' => 'boolean',
         'published_at' => 'datetime',
     ];
+
+    protected static function booted(): void
+    {
+        static::deleting(function (Article $article) {
+            if ($article->cover_image) {
+                ImageUpload::delete($article->cover_image);
+            }
+        });
+    }
 
     public function getSlugOptions(): SlugOptions
     {

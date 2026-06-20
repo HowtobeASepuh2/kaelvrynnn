@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Support\ImageUpload;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ArticleController extends Controller
@@ -40,6 +39,9 @@ class ArticleController extends Controller
         $data['published_at'] = $data['is_published'] ? now() : null;
 
         if ($request->hasFile('cover_image')) {
+            if ($article->cover_image) {
+                ImageUpload::delete($article->cover_image);
+            }
             $data['cover_image'] = ImageUpload::store($request->file('cover_image'), 'articles', 1400);
         }
 
@@ -71,9 +73,6 @@ class ArticleController extends Controller
         $data['published_at'] = $data['is_published'] ? ($article->published_at ?? now()) : null;
 
         if ($request->hasFile('cover_image')) {
-            if ($article->cover_image) {
-                Storage::disk('public')->delete($article->cover_image);
-            }
             $data['cover_image'] = ImageUpload::store($request->file('cover_image'), 'articles', 1400);
         }
 
@@ -84,10 +83,6 @@ class ArticleController extends Controller
 
     public function destroy(Article $article)
     {
-        if ($article->cover_image) {
-            Storage::disk('public')->delete($article->cover_image);
-        }
-
         $article->delete();
 
         return back()->with('success', 'Insight berhasil dihapus.');

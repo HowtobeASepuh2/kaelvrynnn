@@ -114,7 +114,7 @@
                 <label class="admin-label">Ganti Thumbnail</label>
                 @if($project->thumbnail)
                 <div style="margin-bottom:0.5rem;">
-                    <img src="{{ Storage::url($project->thumbnail) }}" style="height:5rem; border-radius:0.5rem; object-fit:cover;">
+                    <img src="{{ \App\Support\ImageUpload::url($project->thumbnail) }}" style="height:5rem; border-radius:0.5rem; object-fit:cover;">
                 </div>
                 @endif
                 <input type="file" name="thumbnail" accept="image/*" class="admin-input" style="padding:0.5rem;">
@@ -124,7 +124,7 @@
                 <label class="admin-label">Open Graph Image</label>
                 @if($project->og_image)
                 <div style="margin-bottom:0.5rem;">
-                    <img src="{{ Storage::url($project->og_image) }}" style="height:5rem; border-radius:0.5rem; object-fit:cover;">
+                    <img src="{{ \App\Support\ImageUpload::url($project->og_image) }}" style="height:5rem; border-radius:0.5rem; object-fit:cover;">
                     <p style="font-size:0.7rem; color:#4ade80; margin-top:0.25rem;">OG image sudah ada</p>
                 </div>
                 @endif
@@ -138,7 +138,7 @@
                 <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.5rem;">
                     @foreach($project->images as $img)
                     <div style="position:relative;">
-                        <img src="{{ Storage::url($img->image) }}" style="height:4rem; width:4rem; border-radius:0.375rem; object-fit:cover;">
+                        <img src="{{ \App\Support\ImageUpload::url($img->image) }}" style="height:4rem; width:4rem; border-radius:0.375rem; object-fit:cover;">
                         <form action="{{ route('admin.projects.images.destroy', $img) }}" method="POST" onsubmit="event.preventDefault(); openAdminConfirmModal(this, 'Hapus gambar galeri ini?')" style="position:absolute; top:-0.4rem; right:-0.4rem;">
                             @csrf @method('DELETE')
                             <button type="submit" style="width:1.25rem; height:1.25rem; border-radius:9999px; border:none; background:#ef4444; color:white; font-size:0.65rem; cursor:pointer;">

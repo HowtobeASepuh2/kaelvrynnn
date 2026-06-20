@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
@@ -26,7 +27,13 @@ class ImageUpload
 
     public static function delete(string $url): void
     {
-        if (empty($url) || !str_starts_with($url, 'http')) {
+        if (empty($url)) {
+            return;
+        }
+
+        if (!str_starts_with($url, 'http')) {
+            Storage::disk('public')->delete($url);
+
             return;
         }
 
@@ -46,6 +53,6 @@ class ImageUpload
     }
 
     // Kalau path lokal, pakai Storage
-    return \Illuminate\Support\Facades\Storage::url($path);
+    return Storage::url($path);
 }
 }

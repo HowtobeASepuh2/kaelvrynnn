@@ -33,14 +33,10 @@ class ProfileController extends Controller
     $data    = $request->except(['photo', 'cv_file', '_token', '_method']);
 
     if ($request->hasFile('photo')) {
-        // Hapus foto lama dari Cloudinary
-        if ($profile && $profile->photo && str_starts_with($profile->photo, 'http')) {
-            \App\Support\ImageUpload::delete($profile->photo);
-        } elseif ($profile && $profile->photo) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($profile->photo);
+        if ($profile && $profile->photo) {
+            ImageUpload::delete($profile->photo);
         }
-        // Upload ke Cloudinary
-        $data['photo'] = \App\Support\ImageUpload::store($request->file('photo'), 'profiles', 800);
+        $data['photo'] = ImageUpload::store($request->file('photo'), 'profiles', 800);
     }
 
     if ($request->hasFile('cv_file')) {

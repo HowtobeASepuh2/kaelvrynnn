@@ -10,7 +10,7 @@
             @forelse($articles as $article)
             <a href="{{ route('articles.show', $article->slug) }}" class="glass-card rounded-2xl overflow-hidden group hover:border-cyan-500/30 transition-colors">
                 @if($article->cover_image)
-                <img src="{{ Storage::url($article->cover_image) }}" alt="{{ $article->title }}" class="w-full h-44 object-cover group-hover:scale-105 transition-transform" loading="lazy">
+                <img src="{{ \App\Support\ImageUpload::url($article->cover_image) }}" alt="{{ $article->title }}" class="w-full h-44 object-cover group-hover:scale-105 transition-transform" loading="lazy">
                 @endif
                 <div class="p-6">
                     <p class="text-xs text-cyan-400 mb-3">{{ $article->published_at?->format('d M Y') }}</p>

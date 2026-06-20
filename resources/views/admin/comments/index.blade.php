@@ -70,7 +70,7 @@
             @else
                 @if($comment->avatar)
                 <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.1);">
-                    <img src="{{ Storage::url($comment->avatar) }}"
+                    <img src="{{ \App\Support\ImageUpload::url($comment->avatar) }}"
                          alt="{{ $comment->name }}"
                          style="width: 100%; height: 100%; object-fit: cover;">
                 </div>

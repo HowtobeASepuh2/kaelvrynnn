@@ -186,7 +186,7 @@
     <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
         <div style="width:2.75rem; height:2.75rem; border-radius:0.75rem; overflow:hidden; flex-shrink:0; border:2px solid rgba(6,182,212,0.3); background:#1e293b;">
     @if($sidebarProfile && $sidebarProfile->photo)
-        <img src="{{ Storage::url($sidebarProfile->photo) }}"
+        <img src="{{ \App\Support\ImageUpload::url($sidebarProfile->photo) }}"
             alt="{{ $sidebarProfile->name }}"
             style="width:100%; height:100%; object-fit:cover; object-position:center top;">
             @else
@@ -289,7 +289,7 @@
                 <span style="font-size:0.875rem; font-weight:500;">{{ Auth::user()->name }}</span>
                 <div style="width:2rem; height:2rem; border-radius:50%; overflow:hidden; flex-shrink:0; background:#1e293b;">
     @if($adminProfile && $adminProfile->photo)
-        <img src="{{ Storage::url($adminProfile->photo) }}"
+        <img src="{{ \App\Support\ImageUpload::url($adminProfile->photo) }}"
             alt="{{ Auth::user()->name }}"
             style="width:100%; height:100%; object-fit:cover; object-position:center top;">
                     @else
@@ -305,7 +305,7 @@
                 <div style="display:flex; align-items:center; gap:0.75rem; padding:0.5rem 0.5rem 0.75rem; border-bottom:1px solid rgba(255,255,255,0.06); margin-bottom:0.5rem;">
                     <div class="admin-profile-avatar">
                         @if($adminProfile && $adminProfile->photo)
-                            <img src="{{ Storage::url($adminProfile->photo) }}" alt="{{ Auth::user()->name }}" style="width:100%; height:100%; object-fit:cover;">
+                            <img src="{{ \App\Support\ImageUpload::url($adminProfile->photo) }}" alt="{{ Auth::user()->name }}" style="width:100%; height:100%; object-fit:cover;">
                         @else
                             <div style="width:100%; height:100%; background:linear-gradient(135deg,#06b6d4,#7c3aed); display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; color:white;">
                                 {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}

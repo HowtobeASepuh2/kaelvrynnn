@@ -9,7 +9,6 @@ use App\Models\ProjectCategory;
 use App\Models\ProjectImage;
 use App\Support\ImageUpload;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProjectController extends Controller
@@ -72,27 +71,20 @@ class ProjectController extends Controller
         $data['is_published'] = $request->boolean('is_published');
 
         if ($request->hasFile('thumbnail')) {
-    $data['thumbnail'] = \App\Support\ImageUpload::store(
-        $request->file('thumbnail'), 'projects', 1200
-    );
-}
+            if ($project->thumbnail) {
+                ImageUpload::delete($project->thumbnail);
+            }
+            $data['thumbnail'] = ImageUpload::store($request->file('thumbnail'), 'projects', 1200);
+        }
 
         if ($request->hasFile('og_image')) {
+            if ($project->og_image) {
+                ImageUpload::delete($project->og_image);
+            }
             $data['og_image'] = ImageUpload::store($request->file('og_image'), 'projects/og', 1200);
         }
 
-        $project = Project::create($data);
-
-        if ($request->hasFile('thumbnail')) {
-    if ($project->thumbnail && str_starts_with($project->thumbnail, 'http')) {
-        \App\Support\ImageUpload::delete($project->thumbnail);
-    } elseif ($project->thumbnail) {
-        Storage::disk('public')->delete($project->thumbnail);
-    }
-    $data['thumbnail'] = \App\Support\ImageUpload::store(
-        $request->file('thumbnail'), 'projects', 1200
-    );
-}
+        Project::create($data);
 
         return redirect()->route('admin.projects.index')->with('success', 'Project berhasil ditambahkan!');
     }
@@ -134,16 +126,10 @@ class ProjectController extends Controller
         $data['is_published'] = $request->boolean('is_published');
 
         if ($request->hasFile('thumbnail')) {
-            if ($project->thumbnail) {
-                Storage::disk('public')->delete($project->thumbnail);
-            }
             $data['thumbnail'] = ImageUpload::store($request->file('thumbnail'), 'projects', 1200);
         }
 
         if ($request->hasFile('og_image')) {
-            if ($project->og_image) {
-                Storage::disk('public')->delete($project->og_image);
-            }
             $data['og_image'] = ImageUpload::store($request->file('og_image'), 'projects/og', 1200);
         }
 
@@ -165,15 +151,6 @@ class ProjectController extends Controller
 
     public function destroy(Project $project)
     {
-        if ($project->thumbnail) {
-            Storage::disk('public')->delete($project->thumbnail);
-        }
-        if ($project->og_image) {
-            Storage::disk('public')->delete($project->og_image);
-        }
-        foreach ($project->images as $img) {
-            Storage::disk('public')->delete($img->image);
-        }
         $project->delete();
 
         return back()->with('success', 'Project berhasil dihapus!');
@@ -195,7 +172,6 @@ class ProjectController extends Controller
 
     public function destroyImage(ProjectImage $image)
     {
-        Storage::disk('public')->delete($image->image);
         $image->delete();
 
         return back()->with('success', 'Gambar galeri berhasil dihapus.');

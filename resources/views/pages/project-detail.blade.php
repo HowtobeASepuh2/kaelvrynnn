@@ -40,7 +40,7 @@
         {{-- Main Thumbnail --}}
         <div class="glass-card rounded-2xl overflow-hidden mb-8" data-aos="fade-up">
             @if($project->thumbnail)
-                <img src="{{ Storage::url($project->thumbnail) }}"
+                <img src="{{ \App\Support\ImageUpload::url($project->thumbnail) }}"
                      alt="{{ $project->title }}"
                      class="w-full object-cover max-h-[500px]" loading="lazy">
             @else
@@ -82,8 +82,8 @@
                     <div class="grid grid-cols-2 gap-3">
                         @foreach($project->images as $img)
                         <div class="rounded-lg overflow-hidden cursor-pointer group"
-                             onclick="openLightbox('{{ Storage::url($img->image) }}')">
-                            <img src="{{ Storage::url($img->image) }}"
+                             onclick="openLightbox('{{ \App\Support\ImageUpload::url($img->image) }}')">
+                            <img src="{{ \App\Support\ImageUpload::url($img->image) }}"
                                  alt="{{ $img->caption ?? $project->title }}"
                                  class="w-full h-40 object-cover transition-transform duration-300 group-hover:scale-105">
                         </div>

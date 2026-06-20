@@ -8,7 +8,7 @@
     <div class="relative overflow-hidden h-48">
         @if($project->thumbnail)
             <img
-                src="{{ Storage::url($project->thumbnail) }}"
+                src="{{ \App\Support\ImageUpload::url($project->thumbnail) }}"
                 alt="{{ $project->title }}"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             >

@@ -12,7 +12,7 @@
             @if($article->excerpt)<p class="text-lg text-slate-400 leading-relaxed">{{ $article->excerpt }}</p>@endif
         </div>
         @if($article->cover_image)
-        <img src="{{ Storage::url($article->cover_image) }}" alt="{{ $article->title }}" class="w-full max-h-[460px] object-cover rounded-2xl mb-8" loading="lazy">
+        <img src="{{ \App\Support\ImageUpload::url($article->cover_image) }}" alt="{{ $article->title }}" class="w-full max-h-[460px] object-cover rounded-2xl mb-8" loading="lazy">
         @endif
         <div class="glass-card rounded-2xl p-8 text-slate-300 leading-8 whitespace-pre-line">{{ $article->body }}</div>
         @if($related->count())
