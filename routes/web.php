@@ -24,6 +24,15 @@ Route::get('/check-gd', function () {
     ];
 });
 
+// TEMPORARY
+Route::get('/check-cloudinary', function () {
+    return [
+        'cloud_name' => config('cloudinary.cloud_url'),
+        'env_url'    => env('CLOUDINARY_URL'),
+        'env_name'   => env('CLOUDINARY_CLOUD_NAME'),
+    ];
+});
+
 // ============ PUBLIC ROUTES ============
 Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/about', [PublicController::class, 'about'])->name('about');
