@@ -39,6 +39,7 @@ Route::get('/sitemap.xml', function () {
     return response($content, 200)->header('Content-Type', 'application/xml');
 })->name('sitemap');
 // Comments
+Route::get('/comments', fn () => redirect()->route('home', [], 302)->withFragment('comments'));
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 
 // ============ ADMIN ROUTES ============

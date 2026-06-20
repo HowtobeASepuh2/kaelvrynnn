@@ -82,12 +82,18 @@ class PortfolioFeatureTest extends TestCase
             'name' => 'Visitor',
             'email' => 'visitor@example.com',
             'body' => 'Portfolio-nya keren.',
-        ])->assertSessionHas('comment_success');
+        ])->assertRedirect(route('home').'#comments')
+            ->assertSessionHas('comment_success');
 
         $this->assertDatabaseHas(Comment::class, [
             'email' => 'visitor@example.com',
             'is_approved' => false,
         ]);
+    }
+
+    public function test_get_comments_redirects_to_home_comments_section(): void
+    {
+        $this->get('/comments')->assertRedirect(route('home').'#comments');
     }
 
     public function test_admin_dashboard_requires_authentication(): void

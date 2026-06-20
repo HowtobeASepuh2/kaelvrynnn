@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Support\ImageUpload;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 
 class CommentController extends Controller
@@ -12,7 +13,7 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         if ($request->filled('website')) {
-            return redirect(url()->previous().'#comments')->with('comment_success', 'Komentar berhasil dikirim!');
+            return $this->redirectToComments()->with('comment_success', 'Komentar berhasil dikirim!');
         }
 
         $request->validate([
@@ -25,21 +26,35 @@ class CommentController extends Controller
         // Rate limiting — max 3 komentar per IP per jam
         $key = 'comment.'.$request->ip();
         if (RateLimiter::tooManyAttempts($key, 3)) {
-            return redirect(url()->previous().'#comments')
+            return $this->redirectToComments()
                 ->withErrors(['body' => 'Terlalu banyak komentar. Coba lagi nanti.'])
                 ->withInput();
         }
         RateLimiter::hit($key, 3600);
 
+        $avatar = null;
+        if ($request->hasFile('avatar')) {
+            try {
+                $avatar = ImageUpload::store($request->file('avatar'), 'comments/avatars', 400);
+            } catch (\Throwable $exception) {
+                Log::warning('Comment avatar upload failed.', ['message' => $exception->getMessage()]);
+            }
+        }
+
         Comment::create([
             'name' => $request->name,
             'email' => $request->email,
-            'avatar' => $request->hasFile('avatar') ? ImageUpload::store($request->file('avatar'), 'comments/avatars', 400) : null,
+            'avatar' => $avatar,
             'body' => $request->body,
             'is_approved' => false,
         ]);
 
-        return redirect(url()->previous().'#comments')
+        return $this->redirectToComments()
             ->with('comment_success', 'Komentar berhasil dikirim!');
+    }
+
+    private function redirectToComments()
+    {
+        return redirect()->route('home', [], 302)->withFragment('comments');
     }
 }
