@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
+    libwebp-dev \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
@@ -17,6 +18,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd \
         --with-freetype=/usr/include/ \
         --with-jpeg=/usr/include/ \
+        --with-webp=/usr/include/ \
     && docker-php-ext-install \
         pdo_mysql \
         mbstring \
