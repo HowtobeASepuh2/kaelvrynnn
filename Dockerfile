@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     libpng-dev \
-    libjpeg62-turbo-dev \
+    libjpeg-dev \
     libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
@@ -13,9 +13,10 @@ RUN apt-get update && apt-get install -y \
     unzip \
     nodejs \
     npm \
+    && ln -s /usr/lib/x86_64-linux-gnu/libjpeg.so /usr/lib/libjpeg.so \
     && docker-php-ext-configure gd \
-        --with-freetype \
-        --with-jpeg \
+        --with-freetype=/usr/include/ \
+        --with-jpeg=/usr/include/ \
     && docker-php-ext-install \
         pdo_mysql \
         mbstring \
