@@ -16,7 +16,7 @@
                         {{-- Avatar --}}
                         <div class="w-32 h-32 mx-auto rounded-2xl mb-6 shadow-xl shadow-purple-500/20 overflow-hidden">
     @if($profile && $profile->photo)
-        <img src="{{ Storage::url($profile->photo) }}"
+        <img src="{{ \App\Support\ImageUpload::url($profile->photo) }}"
         alt="{{ $profile->name }}"
         class="w-full h-full"
         style="object-fit:cover; object-position:center top;">

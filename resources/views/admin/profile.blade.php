@@ -78,7 +78,7 @@
                     <label class="admin-label">Foto Profil</label>
                     @if($profile && $profile->photo)
                     <div style="margin-bottom:0.5rem;">
-                        <img src="{{ Storage::url($profile->photo) }}"
+                        <img src="{{ \App\Support\ImageUpload::url($profile->photo) }}"
                              style="height:5rem; width:5rem; border-radius:0.75rem; object-fit:cover; border:1px solid rgba(255,255,255,0.1);">
                         <p style="font-size:0.7rem; color:#4ade80; margin-top:0.25rem;"><i class="fas fa-check-circle"></i> Foto sudah ada</p>
                     </div>

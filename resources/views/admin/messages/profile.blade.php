@@ -72,7 +72,7 @@
                 <div>
                     <label class="admin-label">Foto Profil</label>
                     @if($profile && $profile->photo)
-                    <img src="{{ Storage::url($profile->photo) }}" style="height:4rem; border-radius:0.5rem; object-fit:cover; margin-bottom:0.5rem; display:block;">
+                    <img src="{{ \App\Support\ImageUpload::url($profile->photo) }}" style="height:4rem; border-radius:0.5rem; object-fit:cover; margin-bottom:0.5rem; display:block;">
                     @endif
                     <input type="file" name="photo" accept="image/*" class="admin-input" style="padding:0.5rem;">
                 </div>

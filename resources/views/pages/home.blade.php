@@ -74,7 +74,7 @@
                         <div class="flex items-center gap-3 mb-6">
                             <div class="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0">
     @if($profile && $profile->photo)
-        <img src="{{ Storage::url($profile->photo) }}"
+        <img src="{{ \App\Support\ImageUpload::url($profile->photo) }}"
              alt="{{ $profile->name }}"
              class="w-full h-full object-cover">
     @else

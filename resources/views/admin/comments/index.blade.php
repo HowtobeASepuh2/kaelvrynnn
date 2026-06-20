@@ -17,7 +17,7 @@
             {{-- Avatar Admin --}}
             <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 2px solid rgba(6,182,212,0.3);">
                 @if($profile && $profile->photo)
-                    <img src="{{ Storage::url($profile->photo) }}"
+                    <img src="{{ \App\Support\ImageUpload::url($profile->photo) }}"
                         style="width: 100%; height: 100%; object-fit: cover;">
                 @else
                     <div style="width: 100%; height: 100%; background: linear-gradient(135deg,#06b6d4,#7c3aed); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white;">
@@ -59,7 +59,7 @@
             @if($comment->is_admin)
                 <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 2px solid rgba(6,182,212,0.3);">
                     @if($profile && $profile->photo)
-                        <img src="{{ Storage::url($profile->photo) }}"
+                        <img src="{{ \App\Support\ImageUpload::url($profile->photo) }}"
                             style="width: 100%; height: 100%; object-fit: cover;">
                     @else
                         <div style="width: 100%; height: 100%; background: linear-gradient(135deg,#06b6d4,#7c3aed); display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700; color: white;">

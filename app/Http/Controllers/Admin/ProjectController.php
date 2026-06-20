@@ -72,8 +72,10 @@ class ProjectController extends Controller
         $data['is_published'] = $request->boolean('is_published');
 
         if ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = ImageUpload::store($request->file('thumbnail'), 'projects', 1200);
-        }
+    $data['thumbnail'] = \App\Support\ImageUpload::store(
+        $request->file('thumbnail'), 'projects', 1200
+    );
+}
 
         if ($request->hasFile('og_image')) {
             $data['og_image'] = ImageUpload::store($request->file('og_image'), 'projects/og', 1200);
@@ -81,16 +83,16 @@ class ProjectController extends Controller
 
         $project = Project::create($data);
 
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $index => $image) {
-                $path = ImageUpload::store($image, 'projects/gallery', 1400);
-                ProjectImage::create([
-                    'project_id' => $project->id,
-                    'image' => $path,
-                    'sort_order' => $index,
-                ]);
-            }
-        }
+        if ($request->hasFile('thumbnail')) {
+    if ($project->thumbnail && str_starts_with($project->thumbnail, 'http')) {
+        \App\Support\ImageUpload::delete($project->thumbnail);
+    } elseif ($project->thumbnail) {
+        Storage::disk('public')->delete($project->thumbnail);
+    }
+    $data['thumbnail'] = \App\Support\ImageUpload::store(
+        $request->file('thumbnail'), 'projects', 1200
+    );
+}
 
         return redirect()->route('admin.projects.index')->with('success', 'Project berhasil ditambahkan!');
     }

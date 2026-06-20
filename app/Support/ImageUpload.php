@@ -3,19 +3,53 @@
 namespace App\Support;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Laravel\Facades\Image;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ImageUpload
 {
     public static function store(UploadedFile $file, string $directory, int $maxWidth = 1600): string
     {
-        $path = trim($directory, '/').'/'.Str::uuid().'.webp';
-        $image = Image::read($file->getRealPath())->scaleDown(width: $maxWidth);
+        $publicId = trim($directory, '/') . '/' . Str::uuid();
 
-        Storage::disk('public')->put($path, (string) $image->toWebp(quality: 82));
+        $result = Cloudinary::upload($file->getRealPath(), [
+            'folder'         => 'portofolio-wisnu/' . trim($directory, '/'),
+            'public_id'      => Str::uuid(),
+            'transformation' => [
+                'width'   => $maxWidth,
+                'crop'    => 'limit',
+                'quality' => 'auto',
+                'fetch_format' => 'auto',
+            ],
+        ]);
 
+        return $result->getSecurePath();
+    }
+
+    public static function delete(string $url): void
+    {
+        if (empty($url) || !str_starts_with($url, 'http')) {
+            return;
+        }
+
+        // Extract public_id dari URL Cloudinary
+        preg_match('/\/portofolio-wisnu\/.+\/([^\.]+)/', $url, $matches);
+        if (!empty($matches[0])) {
+            $publicId = ltrim($matches[0], '/');
+            Cloudinary::destroy($publicId);
+        }
+    }
+
+    public static function url(?string $path): ?string
+{
+    if (empty($path)) return null;
+
+    // Kalau sudah URL penuh (Cloudinary), langsung return
+    if (str_starts_with($path, 'http')) {
         return $path;
     }
+
+    // Kalau path lokal, pakai Storage
+    return \Illuminate\Support\Facades\Storage::url($path);
+}
 }
