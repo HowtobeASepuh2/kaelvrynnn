@@ -11,20 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('projects', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('category_id')->constrained('project_categories')->onDelete('cascade');
-        $table->string('title');
-        $table->string('slug')->unique();
-        $table->text('description');
-        $table->text('objective')->nullable();
-        $table->string('tools');
-        $table->string('year');
-        $table->string('thumbnail')->nullable();
-        $table->string('demo_link')->nullable();
-        $table->boolean('is_featured')->default(false);
-        $table->integer('sort_order')->default(0);
-        $table->timestamps();
+        Schema::create('projects', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('category_id')->constrained('project_categories')->onDelete('cascade');
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->text('description');
+            $table->text('objective')->nullable();
+            $table->string('tools');
+            $table->string('year');
+            $table->string('thumbnail')->nullable();
+            $table->string('demo_link')->nullable();
+            $table->boolean('is_featured')->default(false);
+            $table->integer('sort_order')->default(0);
+            $table->timestamps();
         });
     }
 

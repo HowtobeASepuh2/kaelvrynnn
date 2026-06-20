@@ -4,7 +4,7 @@
 @section('page-subtitle', 'Kelola informasi profil publik')
 
 @section('content')
-<div style="max-width:700px;">
+<div style="width:100%;">
     <div class="admin-card">
         <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
             @csrf @method('PUT')
@@ -90,7 +90,7 @@
                     <label class="admin-label">File CV (PDF)</label>
                     @if($profile && $profile->cv_file)
                     <div style="margin-bottom:0.5rem;">
-                        <a href="{{ Storage::url($profile->cv_file) }}" target="_blank"
+                        <a href="{{ Storage::url($profile->cv_file) }}" target="_blank" rel="noopener noreferrer"
                            style="font-size:0.75rem; color:#22d3ee; text-decoration:none;">
                             <i class="fas fa-file-pdf"></i> Lihat CV yang ada
                         </a>

@@ -52,6 +52,11 @@
                    class="{{ request()->routeIs('services') ? 'text-cyan-400' : 'text-slate-300 hover:text-cyan-400' }} transition-colors">
                     Services
                 </a>
+                <a href="{{ route('articles.index') }}"
+                   style="text-decoration:none; font-size:0.875rem; font-weight:500;"
+                   class="{{ request()->routeIs('articles.*') ? 'text-cyan-400' : 'text-slate-300 hover:text-cyan-400' }} transition-colors">
+                    Insights
+                </a>
                 <a href="{{ route('contact') }}"
                    style="text-decoration:none; font-size:0.875rem; font-weight:500;"
                    class="{{ request()->routeIs('contact') ? 'text-cyan-400' : 'text-slate-300 hover:text-cyan-400' }} transition-colors">
@@ -62,7 +67,7 @@
             {{-- CTA Button --}}
             <div class="hidden md:block">
                 <a href="{{ route('contact') }}" class="btn-primary" style="font-size:0.875rem; padding:0.5rem 1.25rem;">
-                    Hire Me
+                    Ajak Kolaborasi
                 </a>
             </div>
 
@@ -96,12 +101,15 @@
             <a href="{{ route('services') }}" class="nav-mobile-link {{ request()->routeIs('services') ? 'active' : '' }}">
                 <i class="fas fa-briefcase" style="width:1rem;"></i> Services
             </a>
+            <a href="{{ route('articles.index') }}" class="nav-mobile-link {{ request()->routeIs('articles.*') ? 'active' : '' }}">
+                <i class="fas fa-newspaper" style="width:1rem;"></i> Insights
+            </a>
             <a href="{{ route('contact') }}" class="nav-mobile-link {{ request()->routeIs('contact') ? 'active' : '' }}">
                 <i class="fas fa-envelope" style="width:1rem;"></i> Contact
             </a>
             <div style="padding-top:0.75rem; border-top:1px solid rgba(255,255,255,0.05); margin-top:0.5rem;">
                 <a href="{{ route('contact') }}" class="btn-primary" style="display:block; text-align:center; font-size:0.875rem;">
-                    Hire Me
+                    Ajak Kolaborasi
                 </a>
             </div>
         </div>

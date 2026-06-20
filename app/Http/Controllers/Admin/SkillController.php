@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Skill;
+use Illuminate\Http\Request;
 
 class SkillController extends Controller
 {
     public function index()
     {
-        $skills = Skill::orderBy('sort_order')->get();
+        $skills = Skill::orderBy('sort_order')->paginate(15);
+
         return view('admin.skills.index', compact('skills'));
     }
 
@@ -22,12 +23,13 @@ class SkillController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'category' => 'required|string|max:255',
-            'level'    => 'required|in:Beginner,Intermediate,Advanced,Expert',
+            'level' => 'required|in:Beginner,Intermediate,Advanced,Expert',
         ]);
 
         Skill::create($request->except('_token'));
+
         return redirect()->route('admin.skills.index')->with('success', 'Skill berhasil ditambahkan!');
     }
 
@@ -39,18 +41,20 @@ class SkillController extends Controller
     public function update(Request $request, Skill $skill)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'category' => 'required|string|max:255',
-            'level'    => 'required|in:Beginner,Intermediate,Advanced,Expert',
+            'level' => 'required|in:Beginner,Intermediate,Advanced,Expert',
         ]);
 
         $skill->update($request->except(['_token', '_method']));
+
         return redirect()->route('admin.skills.index')->with('success', 'Skill berhasil diperbarui!');
     }
 
     public function destroy(Skill $skill)
     {
         $skill->delete();
+
         return back()->with('success', 'Skill berhasil dihapus!');
     }
 }

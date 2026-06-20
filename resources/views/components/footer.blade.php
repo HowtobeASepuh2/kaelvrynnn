@@ -37,25 +37,25 @@
                     @php $profile = \App\Models\Profile::first(); @endphp
                     @if($profile)
                         @if($profile->instagram)
-                        <a href="{{ $profile->instagram }}" target="_blank"
+                        <a href="{{ $profile->instagram }}" target="_blank" rel="noopener noreferrer"
                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-pink-400 hover:border-pink-400/30 transition-all">
                             <i class="fab fa-instagram text-sm"></i>
                         </a>
                         @endif
                         @if($profile->github)
-                        <a href="{{ $profile->github }}" target="_blank"
+                        <a href="{{ $profile->github }}" target="_blank" rel="noopener noreferrer"
                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-slate-200 hover:border-slate-400/30 transition-all">
                             <i class="fab fa-github text-sm"></i>
                         </a>
                         @endif
                         @if($profile->linkedin)
-                        <a href="{{ $profile->linkedin }}" target="_blank"
+                        <a href="{{ $profile->linkedin }}" target="_blank" rel="noopener noreferrer"
                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-blue-400 hover:border-blue-400/30 transition-all">
                             <i class="fab fa-linkedin text-sm"></i>
                         </a>
                         @endif
                         @if($profile->whatsapp)
-                        <a href="{{ $profile->whatsapp }}" target="_blank"
+                        <a href="{{ $profile->whatsapp }}" target="_blank" rel="noopener noreferrer"
                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-green-400 hover:border-green-400/30 transition-all">
                             <i class="fab fa-whatsapp text-sm"></i>
                         </a>

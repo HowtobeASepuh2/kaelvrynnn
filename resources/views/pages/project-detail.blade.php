@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', $project->title . ' — Wisnu Nugroho')
-@section('meta_description', Str::limit($project->description, 160))
-@section('meta_keywords', $project->tools . ', ' . $project->category->name)
+@section('title', ($project->seo_title ?: $project->title) . ' — Wisnu Nugroho')
+@section('meta_description', $project->seo_description ?: Str::limit($project->description, 160))
+@section('meta_keywords', $project->seo_keywords ?: ($project->tools . ', ' . $project->category->name))
 
 @section('content')
 <div class="pt-28 pb-20">
@@ -27,6 +27,11 @@
                     <i class="fas fa-star mr-1 text-xs"></i>Featured
                 </span>
                 @endif
+                @if($project->project_status)
+                <span class="px-3 py-1 rounded-full text-xs font-medium bg-amber-500/15 text-amber-300 border border-amber-500/25">
+                    {{ $project->project_status }}
+                </span>
+                @endif
             </div>
             <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 mb-4">{{ $project->title }}</h1>
             <p class="text-slate-400 leading-relaxed text-lg">{{ $project->description }}</p>
@@ -37,7 +42,7 @@
             @if($project->thumbnail)
                 <img src="{{ Storage::url($project->thumbnail) }}"
                      alt="{{ $project->title }}"
-                     class="w-full object-cover max-h-[500px]">
+                     class="w-full object-cover max-h-[500px]" loading="lazy">
             @else
                 <div class="w-full h-64 bg-gradient-to-br from-purple-900/40 to-cyan-900/40 flex items-center justify-center">
                     <i class="fas fa-image text-6xl text-slate-700"></i>
@@ -56,6 +61,15 @@
                         <i class="fas fa-bullseye text-cyan-400"></i> Tujuan Project
                     </h2>
                     <p class="text-slate-400 leading-relaxed">{{ $project->objective }}</p>
+                </div>
+                @endif
+
+                @if($project->impact)
+                <div class="glass-card rounded-xl p-6" data-aos="fade-up">
+                    <h2 class="font-semibold text-slate-100 mb-3 flex items-center gap-2">
+                        <i class="fas fa-lightbulb text-amber-300"></i> Hasil & Pembelajaran
+                    </h2>
+                    <p class="text-slate-400 leading-relaxed">{{ $project->impact }}</p>
                 </div>
                 @endif
 
@@ -92,6 +106,24 @@
                             <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Tahun</p>
                             <p class="text-slate-300 text-sm">{{ $project->year }}</p>
                         </div>
+                        @if($project->project_status)
+                        <div>
+                            <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Status</p>
+                            <p class="text-slate-300 text-sm">{{ $project->project_status }}</p>
+                        </div>
+                        @endif
+                        @if($project->role)
+                        <div>
+                            <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Role Saya</p>
+                            <p class="text-slate-300 text-sm">{{ $project->role }}</p>
+                        </div>
+                        @endif
+                        @if($project->duration)
+                        <div>
+                            <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Durasi</p>
+                            <p class="text-slate-300 text-sm">{{ $project->duration }}</p>
+                        </div>
+                        @endif
                         <div>
                             <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Tools Digunakan</p>
                             <div class="flex flex-wrap gap-2">
@@ -105,7 +137,7 @@
                         @if($project->demo_link)
                         <div>
                             <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Link</p>
-                            <a href="{{ $project->demo_link }}" target="_blank" class="btn-primary text-sm py-2 px-4 block text-center">
+                            <a href="{{ route('analytics.project-demo', $project) }}" target="_blank" rel="noopener noreferrer" class="btn-primary text-sm py-2 px-4 block text-center">
                                 <i class="fas fa-external-link-alt mr-2"></i>Lihat Demo
                             </a>
                         </div>
@@ -118,7 +150,7 @@
                     <p class="text-xs text-slate-500 uppercase tracking-wider mb-3">Bagikan</p>
                     <div class="flex gap-2">
                         <a href="https://wa.me/?text={{ urlencode($project->title . ' - ' . url()->current()) }}"
-                           target="_blank"
+                           target="_blank" rel="noopener noreferrer"
                            class="flex-1 py-2 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-medium text-center hover:bg-green-500/20 transition-colors">
                             <i class="fab fa-whatsapp mr-1"></i>WA
                         </a>

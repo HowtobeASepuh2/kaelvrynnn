@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\ProjectCategory;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 class ProjectCategorySeeder extends Seeder

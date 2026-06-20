@@ -44,7 +44,7 @@
                         <i class="fas fa-envelope mr-2"></i>Kirim Pesan
                     </a>
                     @if($profile && $profile->whatsapp)
-                    <a href="{{ $profile->whatsapp }}" target="_blank" class="btn-outline">
+                    <a href="{{ $profile->whatsapp }}" target="_blank" rel="noopener noreferrer" class="btn-outline">
                         <i class="fab fa-whatsapp mr-2"></i>WhatsApp
                     </a>
                     @endif

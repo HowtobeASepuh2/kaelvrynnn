@@ -36,7 +36,13 @@
                             </button>
                         </form>
                         @endif
-                        <form action="{{ route('admin.messages.destroy', $msg->id) }}" method="POST" onsubmit="return confirm('Hapus pesan ini?')">
+                        <form action="{{ route('admin.messages.archive', $msg->id) }}" method="POST">
+                            @csrf @method('PUT')
+                            <button type="submit" class="admin-btn admin-btn-secondary" style="padding:0.375rem 0.75rem; font-size:0.8rem;" title="Arsipkan">
+                                <i class="fas fa-box-archive"></i>
+                            </button>
+                        </form>
+                        <form action="{{ route('admin.messages.destroy', $msg->id) }}" method="POST" onsubmit="event.preventDefault(); openAdminConfirmModal(this, 'Hapus pesan ini?')">
                             @csrf @method('DELETE')
                             <button type="submit" class="admin-btn admin-btn-danger" style="padding:0.375rem 0.75rem; font-size:0.8rem;">
                                 <i class="fas fa-trash"></i>
@@ -50,5 +56,8 @@
             @endforelse
         </tbody>
     </table>
+</div>
+<div style="margin-top:1rem;">
+    {{ $messages->links() }}
 </div>
 @endsection

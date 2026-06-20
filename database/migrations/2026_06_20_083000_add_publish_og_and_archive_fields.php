@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('projects', function (Blueprint $table) {
+            $table->boolean('is_published')->default(true)->after('is_featured');
+            $table->string('og_image')->nullable()->after('thumbnail');
+        });
+
+        Schema::table('contact_messages', function (Blueprint $table) {
+            $table->string('category')->nullable()->after('subject');
+            $table->boolean('is_archived')->default(false)->after('is_read');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('projects', function (Blueprint $table) {
+            $table->dropColumn(['is_published', 'og_image']);
+        });
+
+        Schema::table('contact_messages', function (Blueprint $table) {
+            $table->dropColumn(['category', 'is_archived']);
+        });
+    }
+};

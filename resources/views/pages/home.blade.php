@@ -198,6 +198,35 @@
     </div>
 </section>
 
+{{-- ============ INSIGHTS PREVIEW ============ --}}
+@if($articles->count() > 0)
+<section class="py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <x-section-header
+            tag="Insights"
+            title="Catatan & Studi Kasus"
+            subtitle="Beberapa pembelajaran dan proses kreatif terbaru"
+        />
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            @foreach($articles as $article)
+            <a href="{{ route('articles.show', $article->slug) }}" class="glass-card rounded-2xl p-6 hover:border-cyan-500/30 transition-colors">
+                <p class="text-xs text-cyan-400 mb-3">{{ $article->published_at?->format('d M Y') }}</p>
+                <h3 class="text-lg font-bold text-slate-100 mb-3">{{ $article->title }}</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">{{ $article->excerpt ?: Str::limit(strip_tags($article->body), 120) }}</p>
+            </a>
+            @endforeach
+        </div>
+
+        <div class="text-center mt-10">
+            <a href="{{ route('articles.index') }}" class="btn-outline">
+                Lihat Semua Insights <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+@endif
+
 
 
 {{-- ============ CTA SECTION ============ --}}
@@ -221,7 +250,7 @@
                     <i class="fas fa-paper-plane mr-2"></i>Mulai Diskusi
                 </a>
                 @if($profile && $profile->whatsapp)
-                <a href="{{ $profile->whatsapp }}" target="_blank" class="btn-outline">
+                <a href="{{ $profile->whatsapp }}" target="_blank" rel="noopener noreferrer" class="btn-outline">
                     <i class="fab fa-whatsapp mr-2"></i>WhatsApp
                 </a>
                 @endif
@@ -231,7 +260,7 @@
 </section>
 
 {{-- ============ COMMENTS SECTION ============ --}}
-<section style="padding: 5rem 0; background: rgba(15, 22, 40, 0.5);">
+<section id="comments" style="padding: 5rem 0; background: rgba(15, 22, 40, 0.5); scroll-margin-top: 5rem;">
     <div style="max-width: 56rem; margin: 0 auto; padding: 0 1.5rem;">
 
         <x-section-header
@@ -253,8 +282,9 @@
             </div>
             @endif
 
-            <form action="{{ route('comments.store') }}" method="POST">
+            <form id="comment-form" action="{{ route('comments.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px; opacity:0;" aria-hidden="true">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                     <div>
                         <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.375rem;">
@@ -284,6 +314,16 @@
 
                 <div style="margin-bottom: 1rem;">
                     <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.375rem;">
+                        Foto Profil <span style="font-size: 0.7rem; color: #475569;">(opsional)</span>
+                    </label>
+                    <input type="file" name="avatar" accept="image/*"
+                        style="width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.05); border: 1px solid {{ $errors->has('avatar') ? 'rgba(239,68,68,0.5)' : 'rgba(255,255,255,0.1)' }}; border-radius: 0.5rem; padding: 0.625rem 0.875rem; color: #94a3b8; font-size: 0.875rem; outline: none;">
+                    <p style="font-size: 0.7rem; color: #475569; margin-top: 0.25rem;">Boleh dikosongkan. Format gambar, maksimal 2MB.</p>
+                    @error('avatar')<p style="color:#f87171; font-size:0.75rem; margin-top:0.25rem;">{{ $message }}</p>@enderror
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.375rem;">
                         Komentar *
                     </label>
                     <textarea name="body" rows="4"
@@ -308,8 +348,8 @@
                 {{ $comments->count() }} Komentar
             </h3>
 
-            @forelse($comments as $comment)
-<div class="glass-card" style="border-radius: 0.75rem; padding: 1.25rem; margin-bottom: 1rem; {{ $comment->is_admin ? 'border-left: 3px solid rgba(6,182,212,0.4);' : '' }}" data-aos="fade-up">
+@forelse($comments as $comment)
+<div class="glass-card" style="border-radius: 0.75rem; padding: 1.25rem; margin-bottom: 1rem; {{ $comment->is_pinned ? 'border-left: 3px solid rgba(250,204,21,0.7);' : ($comment->is_admin ? 'border-left: 3px solid rgba(6,182,212,0.4);' : '') }}" data-aos="fade-up">
 
     {{-- Komentar Utama --}}
     <div style="display: flex; gap: 0.875rem;">
@@ -329,9 +369,17 @@
                 @endif
             </div>
         @else
+            @if($comment->avatar)
+            <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.1);">
+                <img src="{{ Storage::url($comment->avatar) }}"
+                     alt="{{ $comment->name }}"
+                     style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            @else
             <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; background: linear-gradient(135deg,#475569,#334155); display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700; color: white; flex-shrink: 0;">
                 {{ strtoupper(substr($comment->name, 0, 1)) }}
             </div>
+            @endif
         @endif
 
         <div style="flex: 1; min-width: 0;">
@@ -340,6 +388,11 @@
                 @if($comment->is_admin)
                 <span style="background: rgba(6,182,212,0.15); color: #22d3ee; font-size: 0.65rem; padding: 0.125rem 0.5rem; border-radius: 9999px; border: 1px solid rgba(6,182,212,0.2);">
                     Admin
+                </span>
+                @endif
+                @if($comment->is_pinned)
+                <span style="background: rgba(250,204,21,0.12); color: #facc15; font-size: 0.65rem; padding: 0.125rem 0.5rem; border-radius: 9999px; border: 1px solid rgba(250,204,21,0.25);">
+                    <i class="fas fa-thumbtack"></i> Disematkan
                 </span>
                 @endif
                 <span style="font-size: 0.7rem; color: #475569;">{{ $comment->created_at->diffForHumans() }}</span>
@@ -399,10 +452,107 @@
     </div>
 </section>
 
+<div id="comment-confirm-modal" style="position: fixed; inset: 0; z-index: 90; display: none; align-items: center; justify-content: center; padding: 1.5rem; background: rgba(2,6,23,0.65); backdrop-filter: blur(10px);">
+    <div style="width: 100%; max-width: 28rem; background: linear-gradient(180deg, #111827, #0f172a); border: 1px solid rgba(6,182,212,0.22); border-radius: 1rem; padding: 1.5rem; box-shadow: 0 25px 80px rgba(0,0,0,0.45); animation: commentModalPop 0.18s ease-out;">
+        <div style="width: 3rem; height: 3rem; border-radius: 9999px; display: flex; align-items: center; justify-content: center; background: rgba(6,182,212,0.12); color: #22d3ee; border: 1px solid rgba(6,182,212,0.25); margin-bottom: 1rem;">
+            <i class="fas fa-paper-plane"></i>
+        </div>
+        <h2 style="font-size: 1.125rem; font-weight: 700; color: #f8fafc; margin: 0 0 0.5rem;">
+            Kirim komentar ini?
+        </h2>
+        <p style="color: #cbd5e1; line-height: 1.6; font-size: 0.9rem; margin: 0 0 1.25rem;">
+            Pastikan nama, email, dan isi komentar sudah benar. Setelah dikirim, komentar tidak bisa kamu edit atau hapus sendiri.
+        </p>
+        <div style="display: flex; gap: 0.875rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.875rem; padding: 1rem; margin-bottom: 1.25rem;">
+            <div id="comment-preview-avatar" style="width: 2.75rem; height: 2.75rem; border-radius: 50%; background: linear-gradient(135deg,#475569,#334155); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 700; color: white; flex-shrink: 0; overflow: hidden;">
+                ?
+            </div>
+            <div style="min-width: 0; flex: 1;">
+                <p id="comment-preview-name" style="font-size: 0.9rem; font-weight: 700; color: #f8fafc; margin: 0 0 0.35rem;">Nama pengirim</p>
+                <p id="comment-preview-body" style="font-size: 0.85rem; line-height: 1.55; color: #cbd5e1; margin: 0; white-space: pre-wrap; word-break: break-word;">Isi komentar akan tampil di sini.</p>
+            </div>
+        </div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <button type="button" class="btn-outline" style="flex: 1; justify-content: center; min-width: 9rem;" onclick="closeCommentConfirmModal()">
+                Periksa Lagi
+            </button>
+            <button type="button" class="btn-primary" style="flex: 1; justify-content: center; min-width: 9rem;" onclick="submitCommentForm()">
+                Ya, Kirim
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes commentModalPop {
+        from { opacity: 0; transform: translateY(10px) scale(0.96); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+</style>
+
 @endsection
 
 @push('scripts')
 <script>
+    const commentForm = document.getElementById('comment-form');
+    const commentConfirmModal = document.getElementById('comment-confirm-modal');
+    let shouldSubmitComment = false;
+
+    commentForm?.addEventListener('submit', function (event) {
+        if (shouldSubmitComment) return;
+
+        event.preventDefault();
+        if (!commentForm.checkValidity()) {
+            commentForm.reportValidity();
+            return;
+        }
+
+        updateCommentPreview();
+        if (commentConfirmModal) commentConfirmModal.style.display = 'flex';
+    });
+
+    function updateCommentPreview() {
+        if (!commentForm) return;
+
+        const name = commentForm.querySelector('[name="name"]')?.value.trim() || 'Pengunjung';
+        const body = commentForm.querySelector('[name="body"]')?.value.trim() || 'Isi komentar akan tampil di sini.';
+        const avatarFile = commentForm.querySelector('[name="avatar"]')?.files?.[0];
+        const avatarEl = document.getElementById('comment-preview-avatar');
+
+        document.getElementById('comment-preview-name').textContent = name;
+        document.getElementById('comment-preview-body').textContent = body;
+
+        if (!avatarEl) return;
+
+        if (avatarFile) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                avatarEl.innerHTML = `<img src="${event.target.result}" alt="${name}" style="width:100%; height:100%; object-fit:cover;">`;
+            };
+            reader.readAsDataURL(avatarFile);
+        } else {
+            avatarEl.textContent = name.charAt(0).toUpperCase();
+        }
+    }
+
+    function closeCommentConfirmModal() {
+        if (commentConfirmModal) commentConfirmModal.style.display = 'none';
+    }
+
+    function submitCommentForm() {
+        if (!commentForm) return;
+        shouldSubmitComment = true;
+        commentForm.submit();
+    }
+
+    commentConfirmModal?.addEventListener('click', function (event) {
+        if (event.target === this) closeCommentConfirmModal();
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') closeCommentConfirmModal();
+    });
+
     // Typed text animation
     const texts = [
         'Graphic Designer',

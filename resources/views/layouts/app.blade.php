@@ -30,6 +30,23 @@
     {{-- Canonical URL --}}
     <link rel="canonical" href="{{ url()->current() }}">
 
+    {{-- Structured Data --}}
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'Person',
+            'name' => $profile->name ?? 'Wisnu Nugroho',
+            'jobTitle' => $profile->title ?? 'UI/UX Designer & Creative Editor',
+            'url' => url('/'),
+            'email' => $profile->email ?? null,
+            'sameAs' => array_values(array_filter([
+                $profile->instagram ?? null,
+                $profile->github ?? null,
+                $profile->linkedin ?? null,
+            ])),
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+
     {{-- Favicon --}}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 

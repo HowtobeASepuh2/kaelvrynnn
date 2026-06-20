@@ -41,15 +41,15 @@
 {{-- List Komentar --}}
 <div style="margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
     <h3 style="font-size: 1rem; font-weight: 600; color: #f1f5f9;">
-        Semua Komentar ({{ $comments->count() }})
+        Semua Komentar ({{ $commentStats['total'] }})
     </h3>
     <span style="font-size: 0.8rem; color: #64748b;">
-        {{ $comments->where('reply', null)->where('is_admin', false)->count() }} belum dibalas
+        {{ $commentStats['unreplied'] }} belum dibalas · {{ $commentStats['pinned'] }}/3 disematkan
     </span>
 </div>
 
 @forelse($comments as $comment)
-<div class="admin-card" style="margin-bottom: 1rem; {{ $comment->is_admin ? 'border-left: 3px solid rgba(6,182,212,0.5);' : '' }}">
+<div class="admin-card" style="margin-bottom: 1rem; {{ $comment->is_pinned ? 'border-left: 3px solid rgba(250,204,21,0.7);' : ($comment->is_admin ? 'border-left: 3px solid rgba(6,182,212,0.5);' : '') }}">
 
     {{-- Header --}}
     <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem;">
@@ -68,9 +68,17 @@
                     @endif
                 </div>
             @else
+                @if($comment->avatar)
+                <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.1);">
+                    <img src="{{ Storage::url($comment->avatar) }}"
+                         alt="{{ $comment->name }}"
+                         style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                @else
                 <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; background: linear-gradient(135deg,#475569,#334155); display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; font-size: 0.875rem; flex-shrink: 0;">
                     {{ strtoupper(substr($comment->name, 0, 1)) }}
                 </div>
+                @endif
             @endif
 
             <div>
@@ -78,6 +86,11 @@
                     <p style="font-weight: 600; color: #f1f5f9; font-size: 0.9rem;">{{ $comment->name }}</p>
                     @if($comment->is_admin)
                     <span class="badge badge-cyan" style="font-size: 0.65rem;">Admin</span>
+                    @endif
+                    @if($comment->is_pinned)
+                    <span class="badge" style="font-size: 0.65rem; background: rgba(250,204,21,0.15); color: #facc15;">
+                        <i class="fas fa-thumbtack"></i> Disematkan
+                    </span>
                     @endif
                 </div>
                 <p style="font-size: 0.75rem; color: #64748b;">
@@ -94,6 +107,15 @@
             <span class="badge badge-red" style="font-size: 0.7rem;">Tersembunyi</span>
             @endif
 
+            <form action="{{ route('admin.comments.pin', $comment->id) }}" method="POST">
+                @csrf @method('PUT')
+                <button type="submit" class="admin-btn admin-btn-secondary"
+                    style="padding: 0.375rem 0.625rem; font-size: 0.75rem; {{ $comment->is_pinned ? 'color:#facc15; border-color:rgba(250,204,21,0.25);' : '' }}"
+                    title="{{ $comment->is_pinned ? 'Lepas sematan' : 'Sematkan komentar' }}">
+                    <i class="fas fa-thumbtack"></i>
+                </button>
+            </form>
+
             <form action="{{ route('admin.comments.approve', $comment->id) }}" method="POST">
                 @csrf @method('PUT')
                 <button type="submit" class="admin-btn admin-btn-secondary"
@@ -104,7 +126,7 @@
             </form>
 
             <form action="{{ route('admin.comments.destroy', $comment->id) }}" method="POST"
-                onsubmit="return confirm('Hapus komentar ini?')">
+                onsubmit="event.preventDefault(); openAdminConfirmModal(this, 'Hapus komentar ini?')">
                 @csrf @method('DELETE')
                 <button type="submit" class="admin-btn admin-btn-danger"
                     style="padding: 0.375rem 0.625rem; font-size: 0.75rem;">
@@ -156,5 +178,9 @@
     <p style="color: #64748b;">Belum ada komentar.</p>
 </div>
 @endforelse
+
+<div style="margin-top:1rem;">
+    {{ $comments->links() }}
+</div>
 
 @endsection

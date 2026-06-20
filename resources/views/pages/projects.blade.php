@@ -78,10 +78,14 @@
 
         {{-- Result count --}}
         <p style="color:#64748b; font-size:0.875rem; margin-top:1.5rem; text-align:center;">
-            Menampilkan {{ $projects->count() }} project
+            Menampilkan {{ $projects->count() }} dari {{ $projects->total() }} project
             @if(request('search')) untuk "<span style="color:#22d3ee;">{{ request('search') }}</span>"@endif
             @if(request('category')) dalam kategori "<span style="color:#22d3ee;">{{ request('category') }}</span>"@endif
         </p>
+
+        <div class="mt-6">
+            {{ $projects->links() }}
+        </div>
 
         @else
         <div style="text-align:center; padding:5rem 0;">

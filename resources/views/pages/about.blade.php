@@ -50,19 +50,19 @@
                         {{-- Social --}}
                         <div class="flex justify-center gap-3 mt-6">
                             @if($profile && $profile->instagram)
-                            <a href="{{ $profile->instagram }}" target="_blank"
+                            <a href="{{ $profile->instagram }}" target="_blank" rel="noopener noreferrer"
                                class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-pink-400 hover:border-pink-400/30 transition-all">
                                 <i class="fab fa-instagram text-sm"></i>
                             </a>
                             @endif
                             @if($profile && $profile->github)
-                            <a href="{{ $profile->github }}" target="_blank"
+                            <a href="{{ $profile->github }}" target="_blank" rel="noopener noreferrer"
                                class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:border-white/30 transition-all">
                                 <i class="fab fa-github text-sm"></i>
                             </a>
                             @endif
                             @if($profile && $profile->linkedin)
-                            <a href="{{ $profile->linkedin }}" target="_blank"
+                            <a href="{{ $profile->linkedin }}" target="_blank" rel="noopener noreferrer"
                                class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-blue-400 hover:border-blue-400/30 transition-all">
                                 <i class="fab fa-linkedin text-sm"></i>
                             </a>
@@ -70,7 +70,7 @@
                         </div>
 
                         @if($profile && $profile->cv_file)
-                        <a href="{{ Storage::url($profile->cv_file) }}" download
+                        <a href="{{ route('cv.download') }}"
                            class="btn-primary w-full text-center mt-6 block">
                             <i class="fas fa-download mr-2"></i>Download CV
                         </a>

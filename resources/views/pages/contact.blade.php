@@ -42,19 +42,19 @@
                     <p class="text-xs text-slate-500 uppercase tracking-wider mb-3">Follow Me</p>
                     <div class="flex gap-3">
                         @if($profile && $profile->instagram)
-                        <a href="{{ $profile->instagram }}" target="_blank"
+                        <a href="{{ $profile->instagram }}" target="_blank" rel="noopener noreferrer"
                            class="flex-1 py-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-pink-400 hover:border-pink-400/30 transition-all">
                             <i class="fab fa-instagram"></i>
                         </a>
                         @endif
                         @if($profile && $profile->github)
-                        <a href="{{ $profile->github }}" target="_blank"
+                        <a href="{{ $profile->github }}" target="_blank" rel="noopener noreferrer"
                            class="flex-1 py-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:border-white/30 transition-all">
                             <i class="fab fa-github"></i>
                         </a>
                         @endif
                         @if($profile && $profile->linkedin)
-                        <a href="{{ $profile->linkedin }}" target="_blank"
+                        <a href="{{ $profile->linkedin }}" target="_blank" rel="noopener noreferrer"
                            class="flex-1 py-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-blue-400 hover:border-blue-400/30 transition-all">
                             <i class="fab fa-linkedin"></i>
                         </a>
@@ -76,6 +76,7 @@
 
                     <form action="{{ route('contact.send') }}" method="POST" class="space-y-5">
                         @csrf
+                        <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px; opacity:0;" aria-hidden="true">
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div>
@@ -100,6 +101,18 @@
                                    placeholder="Topik pesan kamu"
                                    class="w-full bg-white/5 border {{ $errors->has('subject') ? 'border-red-500/50' : 'border-white/10' }} rounded-xl px-4 py-3 text-slate-300 placeholder-slate-600 focus:outline-none focus:border-cyan-500/50 transition-colors text-sm">
                             @error('subject')<p class="text-red-400 text-xs mt-1">{{ $message }}</p>@enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-sm text-slate-400 mb-2">Kategori <span class="text-red-400">*</span></label>
+                            <select name="category"
+                                    class="w-full bg-white/5 border {{ $errors->has('category') ? 'border-red-500/50' : 'border-white/10' }} rounded-xl px-4 py-3 text-slate-300 focus:outline-none focus:border-cyan-500/50 transition-colors text-sm">
+                                <option value="" class="bg-slate-900">Pilih kategori pesan</option>
+                                @foreach(['Kolaborasi', 'Freelance', 'Desain UI/UX', 'Desain Grafis', 'Video Editing', 'Lainnya'] as $category)
+                                <option value="{{ $category }}" class="bg-slate-900" {{ old('category') === $category ? 'selected' : '' }}>{{ $category }}</option>
+                                @endforeach
+                            </select>
+                            @error('category')<p class="text-red-400 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
 
                         <div>

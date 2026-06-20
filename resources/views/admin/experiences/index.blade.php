@@ -25,7 +25,7 @@
                         <a href="{{ route('admin.experiences.edit', $exp) }}" class="admin-btn admin-btn-secondary" style="padding:0.375rem 0.75rem;">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <form action="{{ route('admin.experiences.destroy', $exp) }}" method="POST" onsubmit="return confirm('Hapus experience ini?')">
+                        <form action="{{ route('admin.experiences.destroy', $exp) }}" method="POST" onsubmit="event.preventDefault(); openAdminConfirmModal(this, 'Hapus experience ini?')">
                             @csrf @method('DELETE')
                             <button type="submit" class="admin-btn admin-btn-danger" style="padding:0.375rem 0.75rem;">
                                 <i class="fas fa-trash"></i>
@@ -39,5 +39,8 @@
             @endforelse
         </tbody>
     </table>
+</div>
+<div style="margin-top:1rem;">
+    {{ $experiences->links() }}
 </div>
 @endsection

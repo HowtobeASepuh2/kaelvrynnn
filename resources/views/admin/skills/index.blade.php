@@ -28,7 +28,7 @@
                         <a href="{{ route('admin.skills.edit', $skill) }}" class="admin-btn admin-btn-secondary" style="padding:0.375rem 0.75rem;">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <form action="{{ route('admin.skills.destroy', $skill) }}" method="POST" onsubmit="return confirm('Hapus skill ini?')">
+                        <form action="{{ route('admin.skills.destroy', $skill) }}" method="POST" onsubmit="event.preventDefault(); openAdminConfirmModal(this, 'Hapus skill ini?')">
                             @csrf @method('DELETE')
                             <button type="submit" class="admin-btn admin-btn-danger" style="padding:0.375rem 0.75rem;">
                                 <i class="fas fa-trash"></i>
@@ -42,5 +42,8 @@
             @endforelse
         </tbody>
     </table>
+</div>
+<div style="margin-top:1rem;">
+    {{ $skills->links() }}
 </div>
 @endsection

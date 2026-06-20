@@ -32,6 +32,11 @@
         <priority>0.7</priority>
     </url>
     <url>
+        <loc>{{ url('/insights') }}</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
         <loc>{{ url('/contact') }}</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
@@ -43,6 +48,15 @@
         <lastmod>{{ $project->updated_at->toAtomString() }}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
+    </url>
+    @endforeach
+
+    @foreach($articles as $article)
+    <url>
+        <loc>{{ url('/insights/' . $article->slug) }}</loc>
+        <lastmod>{{ $article->updated_at->toAtomString() }}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
     </url>
     @endforeach
 

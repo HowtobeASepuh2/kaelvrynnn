@@ -12,11 +12,14 @@ class Project extends Model
 
     protected $fillable = [
         'category_id', 'title', 'slug', 'description', 'objective',
-        'tools', 'year', 'thumbnail', 'demo_link', 'is_featured', 'sort_order',
+        'project_status', 'role', 'duration', 'impact', 'tools', 'year',
+        'thumbnail', 'og_image', 'demo_link', 'seo_title', 'seo_description', 'seo_keywords',
+        'is_featured', 'is_published', 'sort_order',
     ];
 
     protected $casts = [
         'is_featured' => 'boolean',
+        'is_published' => 'boolean',
     ];
 
     public function getSlugOptions(): SlugOptions
@@ -34,5 +37,10 @@ class Project extends Model
     public function images()
     {
         return $this->hasMany(ProjectImage::class)->orderBy('sort_order');
+    }
+
+    public function metric()
+    {
+        return $this->hasOne(ProjectMetric::class);
     }
 }

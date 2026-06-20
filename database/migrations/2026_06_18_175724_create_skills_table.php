@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('skills', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->string('category');
-        $table->enum('level', ['Beginner', 'Intermediate', 'Advanced', 'Expert']);
-        $table->text('description')->nullable();
-        $table->string('icon')->nullable();
-        $table->integer('sort_order')->default(0);
-        $table->timestamps();
+        Schema::create('skills', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('category');
+            $table->enum('level', ['Beginner', 'Intermediate', 'Advanced', 'Expert']);
+            $table->text('description')->nullable();
+            $table->string('icon')->nullable();
+            $table->integer('sort_order')->default(0);
+            $table->timestamps();
         });
     }
 

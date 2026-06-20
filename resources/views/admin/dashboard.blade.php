@@ -13,6 +13,10 @@
         ['fa-star', 'Total Skill', $stats['skills'], 'purple'],
         ['fa-envelope', 'Total Pesan', $stats['messages'], 'blue'],
         ['fa-bell', 'Pesan Belum Dibaca', $stats['unread'], 'red'],
+        ['fa-newspaper', 'Total Insight', $stats['articles'], 'cyan'],
+        ['fa-eye', 'Project Views', $stats['project_views'], 'purple'],
+        ['fa-arrow-up-right-from-square', 'Klik Demo', $stats['demo_clicks'], 'blue'],
+        ['fa-download', 'Download CV', $stats['cv_downloads'], 'red'],
     ] as [$icon, $label, $value, $color])
     <div class="admin-card" style="border-top:3px solid {{ $color === 'cyan' ? '#06b6d4' : ($color === 'purple' ? '#7c3aed' : ($color === 'blue' ? '#3b82f6' : '#ef4444')) }};">
         <div style="display:flex; align-items:center; justify-content:space-between;">
@@ -96,6 +100,9 @@
         </a>
         <a href="{{ route('admin.experiences.create') }}" class="admin-btn admin-btn-secondary">
             <i class="fas fa-plus"></i> Tambah Experience
+        </a>
+        <a href="{{ route('admin.articles.create') }}" class="admin-btn admin-btn-secondary">
+            <i class="fas fa-newspaper"></i> Tulis Insight
         </a>
         <a href="{{ route('admin.messages.index') }}" class="admin-btn admin-btn-secondary">
             <i class="fas fa-envelope"></i> Baca Pesan

@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('experiences', function (Blueprint $table) {
-        $table->id();
-        $table->string('year');
-        $table->string('title');
-        $table->text('description');
-        $table->integer('sort_order')->default(0);
-        $table->timestamps();
+        Schema::create('experiences', function (Blueprint $table) {
+            $table->id();
+            $table->string('year');
+            $table->string('title');
+            $table->text('description');
+            $table->integer('sort_order')->default(0);
+            $table->timestamps();
         });
     }
 
