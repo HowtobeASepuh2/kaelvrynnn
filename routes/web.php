@@ -16,6 +16,14 @@ use App\Models\Article;
 use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
+// TEMPORARY
+Route::get('/check-gd', function () {
+    return [
+        'gd_loaded' => extension_loaded('gd'),
+        'php_version' => PHP_VERSION,
+    ];
+});
+
 // ============ PUBLIC ROUTES ============
 Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/about', [PublicController::class, 'about'])->name('about');
