@@ -2,10 +2,10 @@
 
 @section('title', 'Projects — Wisnu Nugroho')
 @section('meta_description', 'Koleksi project desain grafis, UI/UX, social media design, dan video editing karya Wisnu Nugroho.')
-@section('meta_keywords', 'Project Desain Grafis, UI/UX Design, Portofolio Wisnu Nugroho')
+
 @section('content')
-<div class="pt-28 pb-20">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div style="padding-top:7rem; padding-bottom:5rem;">
+    <div style="max-width:72rem; margin:0 auto; padding:0 1.5rem;">
 
         <x-section-header
             tag="Portfolio"
@@ -13,32 +13,56 @@
             subtitle="Kumpulan karya desain grafis, UI/UX, social media, dan video editing"
         />
 
-        {{-- Filter & Search --}}
-        <div class="flex flex-col sm:flex-row gap-4 mb-10" data-aos="fade-up">
+        {{-- Search & Filter --}}
+        <div style="margin-bottom:2.5rem;">
 
-            {{-- Search --}}
-            <div class="relative flex-1">
-                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+            {{-- Search Box --}}
+            <div style="position:relative; margin-bottom:1rem;">
+                <i class="fas fa-search" style="position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:#64748b; font-size:0.875rem; pointer-events:none;"></i>
                 <input
                     type="text"
                     id="search-input"
                     placeholder="Cari project..."
                     value="{{ request('search') }}"
-                    class="w-full bg-white/5 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-slate-300 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 transition-colors text-sm"
+                    style="
+                        width:100%; box-sizing:border-box;
+                        background:rgba(255,255,255,0.05);
+                        border:1px solid rgba(255,255,255,0.1);
+                        border-radius:0.75rem;
+                        padding:0.75rem 1rem 0.75rem 2.75rem;
+                        color:#e2e8f0;
+                        font-size:0.875rem;
+                        outline:none;
+                        transition:border-color 0.2s;
+                    "
+                    onfocus="this.style.borderColor='rgba(6,182,212,0.5)'"
+                    onblur="this.style.borderColor='rgba(255,255,255,0.1)'"
                 >
             </div>
 
             {{-- Category Filter --}}
-            <div class="flex flex-wrap gap-2">
+            <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
                 <a href="{{ route('projects.index') }}"
-                   class="px-4 py-2 rounded-xl text-sm font-medium transition-all {{ !request('category') ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'bg-white/5 text-slate-400 border border-white/10 hover:border-cyan-500/30 hover:text-cyan-400' }}">
+                   style="
+                        padding:0.5rem 1rem; border-radius:0.75rem; font-size:0.875rem;
+                        font-weight:500; text-decoration:none; transition:all 0.2s;
+                        {{ !request('category')
+                            ? 'background:rgba(6,182,212,0.15); color:#22d3ee; border:1px solid rgba(6,182,212,0.3);'
+                            : 'background:rgba(255,255,255,0.05); color:#94a3b8; border:1px solid rgba(255,255,255,0.1);' }}
+                   ">
                     Semua
                 </a>
                 @foreach($categories as $cat)
-                <a href="{{ route('projects.index', ['category' => $cat->slug]) }}"
-                   class="px-4 py-2 rounded-xl text-sm font-medium transition-all {{ request('category') === $cat->slug ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'bg-white/5 text-slate-400 border border-white/10 hover:border-cyan-500/30 hover:text-cyan-400' }}">
+                <a href="{{ route('projects.index', ['category' => $cat->slug, 'search' => request('search')]) }}"
+                   style="
+                        padding:0.5rem 1rem; border-radius:0.75rem; font-size:0.875rem;
+                        font-weight:500; text-decoration:none; transition:all 0.2s;
+                        {{ request('category') === $cat->slug
+                            ? 'background:rgba(6,182,212,0.15); color:#22d3ee; border:1px solid rgba(6,182,212,0.3);'
+                            : 'background:rgba(255,255,255,0.05); color:#94a3b8; border:1px solid rgba(255,255,255,0.1);' }}
+                   ">
                     {{ $cat->name }}
-                    <span class="ml-1 text-xs opacity-60">({{ $cat->projects_count }})</span>
+                    <span style="opacity:0.6; font-size:0.75rem;">({{ $cat->projects_count }})</span>
                 </a>
                 @endforeach
             </div>
@@ -46,16 +70,33 @@
 
         {{-- Projects Grid --}}
         @if($projects->count() > 0)
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="projects-grid">
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:1.5rem;">
             @foreach($projects as $project)
                 <x-project-card :project="$project" />
             @endforeach
         </div>
+
+        {{-- Result count --}}
+        <p style="color:#64748b; font-size:0.875rem; margin-top:1.5rem; text-align:center;">
+            Menampilkan {{ $projects->count() }} project
+            @if(request('search')) untuk "<span style="color:#22d3ee;">{{ request('search') }}</span>"@endif
+            @if(request('category')) dalam kategori "<span style="color:#22d3ee;">{{ request('category') }}</span>"@endif
+        </p>
+
         @else
-        <div class="text-center py-20">
-            <i class="fas fa-folder-open text-5xl text-slate-700 mb-4"></i>
-            <p class="text-slate-400">Belum ada project di kategori ini.</p>
-            <a href="{{ route('projects.index') }}" class="btn-outline mt-4 inline-block">Lihat Semua</a>
+        <div style="text-align:center; padding:5rem 0;">
+            <i class="fas fa-folder-open" style="font-size:3.5rem; color:#1e293b; margin-bottom:1rem; display:block;"></i>
+            <p style="color:#64748b; margin-bottom:1rem;">
+                @if(request('search'))
+                    Tidak ada project dengan kata kunci "<span style="color:#22d3ee;">{{ request('search') }}</span>"
+                @else
+                    Belum ada project di kategori ini.
+                @endif
+            </p>
+            <a href="{{ route('projects.index') }}"
+               style="display:inline-block; padding:0.5rem 1.25rem; border:1px solid rgba(6,182,212,0.3); color:#22d3ee; border-radius:0.5rem; text-decoration:none; font-size:0.875rem;">
+                Lihat Semua Project
+            </a>
         </div>
         @endif
 
@@ -64,14 +105,23 @@
 
 @push('scripts')
 <script>
-document.getElementById('search-input').addEventListener('input', function() {
-    const val = this.value;
-    const url = new URL(window.location.href);
-    if (val) { url.searchParams.set('search', val); }
-    else { url.searchParams.delete('search'); }
-    clearTimeout(this._timer);
-    this._timer = setTimeout(() => window.location.href = url.toString(), 500);
-});
+    // Search dengan debounce 500ms
+    let searchTimer;
+    document.getElementById('search-input').addEventListener('input', function () {
+        clearTimeout(searchTimer);
+        const val = this.value;
+        searchTimer = setTimeout(() => {
+            const url = new URL(window.location.href);
+            if (val.trim()) {
+                url.searchParams.set('search', val.trim());
+            } else {
+                url.searchParams.delete('search');
+            }
+            // Pertahankan filter kategori yang aktif
+            window.location.href = url.toString();
+        }, 600);
+    });
 </script>
 @endpush
+
 @endsection

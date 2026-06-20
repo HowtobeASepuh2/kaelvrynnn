@@ -14,9 +14,17 @@
                 <div class="relative">
                     <div class="glass-card rounded-2xl p-8 text-center">
                         {{-- Avatar --}}
-                        <div class="w-32 h-32 mx-auto rounded-2xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white text-4xl font-bold mb-6 shadow-xl shadow-purple-500/20">
-                            WN
-                        </div>
+                        <div class="w-32 h-32 mx-auto rounded-2xl mb-6 shadow-xl shadow-purple-500/20 overflow-hidden">
+    @if($profile && $profile->photo)
+        <img src="{{ Storage::url($profile->photo) }}"
+             alt="{{ $profile->name }}"
+             class="w-full h-full object-cover">
+    @else
+        <div class="w-full h-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white text-4xl font-bold">
+            {{ strtoupper(substr($profile->name ?? 'WN', 0, 2)) }}
+        </div>
+    @endif
+</div>
 
                         <h2 class="text-xl font-bold text-slate-100 mb-1">{{ $profile->name ?? 'Wisnu Nugroho' }}</h2>
                         <p class="text-cyan-400 text-sm mb-4">{{ $profile->title ?? 'Graphic Designer & Creative Editor' }}</p>

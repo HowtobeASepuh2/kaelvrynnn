@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\ExperienceController;
 use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
 // ============ PUBLIC ROUTES ============
@@ -25,6 +26,8 @@ Route::get('/sitemap.xml', function () {
     $content  = view('sitemap', compact('projects'))->render();
     return response($content, 200)->header('Content-Type', 'application/xml');
 })->name('sitemap');
+// Comments
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 
 // ============ ADMIN ROUTES ============
 Route::get('/admin/login', [AdminController::class, 'loginForm'])->name('admin.login');
@@ -32,6 +35,12 @@ Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.logi
 Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    // Comments Admin
+Route::get('/comments', [App\Http\Controllers\Admin\CommentAdminController::class, 'index'])->name('comments.index');
+Route::post('/comments/{id}/reply', [App\Http\Controllers\Admin\CommentAdminController::class, 'reply'])->name('comments.reply');
+Route::put('/comments/{id}/approve', [App\Http\Controllers\Admin\CommentAdminController::class, 'approve'])->name('comments.approve');
+Route::delete('/comments/{id}', [App\Http\Controllers\Admin\CommentAdminController::class, 'destroy'])->name('comments.destroy');
+Route::post('/comments/store-admin', [App\Http\Controllers\Admin\CommentAdminController::class, 'store'])->name('comments.store.admin');
 
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');

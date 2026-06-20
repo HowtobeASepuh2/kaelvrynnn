@@ -5,7 +5,7 @@
 @section('content')
 
 {{-- ============ HERO SECTION ============ --}}
-<section class="relative min-h-screen flex items-center pt-16 overflow-hidden">
+<section class="relative flex items-center overflow-hidden" style="padding-top: 4rem; min-height: 100vh;">
 
     {{-- Background Effects --}}
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
@@ -14,7 +14,7 @@
         <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent"></div>
     </div>
 
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full" style="padding-top: 0; padding-bottom: 2rem;">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
             {{-- Left: Text --}}
@@ -67,14 +67,22 @@
             </div>
 
             {{-- Right: Visual Card --}}
-            <div class="relative" data-aos="fade-left">
-                <div class="relative z-10">
+<div class="relative" data-aos="fade-left">
+    <div class="relative z-10" style="padding-bottom: 1rem;">
                     {{-- Main Card --}}
                     <div class="glass-card rounded-2xl p-6">
                         <div class="flex items-center gap-3 mb-6">
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
-                                WN
-                            </div>
+                            <div class="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0">
+    @if($profile && $profile->photo)
+        <img src="{{ Storage::url($profile->photo) }}"
+             alt="{{ $profile->name }}"
+             class="w-full h-full object-cover">
+    @else
+        <div class="w-full h-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+            {{ strtoupper(substr($profile->name ?? 'WN', 0, 2)) }}
+        </div>
+    @endif
+</div>
                             <div>
                                 <p class="font-semibold text-slate-100">Wisnu Nugroho</p>
                                 <p class="text-xs text-slate-400">Graphic Designer & Creative Editor</p>
@@ -132,7 +140,7 @@
                     </div>
 
                     {{-- Floating Badge 2 --}}
-                    <div class="absolute -bottom-4 -left-4 glass-card rounded-xl px-4 py-2.5 flex items-center gap-2 shadow-lg">
+                    <div class="absolute -bottom-4 -left-4 glass-card rounded-xl px-4 py-2.5 flex items-center gap-2 shadow-lg" style="z-index:20;">
                         <i class="fas fa-graduation-cap text-cyan-400 text-sm"></i>
                         <span class="text-xs font-medium text-slate-200">Sistem Informasi UNJA</span>
                     </div>
@@ -190,6 +198,8 @@
     </div>
 </section>
 
+
+
 {{-- ============ CTA SECTION ============ --}}
 <section class="py-20">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -217,6 +227,175 @@
                 @endif
             </div>
         </div>
+    </div>
+</section>
+
+{{-- ============ COMMENTS SECTION ============ --}}
+<section style="padding: 5rem 0; background: rgba(15, 22, 40, 0.5);">
+    <div style="max-width: 56rem; margin: 0 auto; padding: 0 1.5rem;">
+
+        <x-section-header
+            tag="Komunitas"
+            title="Komentar & Feedback"
+            subtitle="Tinggalkan komentar atau feedback untuk saya. Saya akan membalasnya langsung!"
+        />
+
+        {{-- Form Komentar --}}
+        <div class="glass-card" style="border-radius: 1rem; padding: 1.5rem; margin-bottom: 2.5rem;" data-aos="fade-up">
+            <h3 style="font-size: 1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.25rem;">
+                <i class="fas fa-comment" style="color: #22d3ee; margin-right: 0.5rem;"></i>
+                Tulis Komentar
+            </h3>
+
+            @if(session('comment_success'))
+            <div style="background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #4ade80; padding: 0.75rem 1rem; border-radius: 0.5rem; margin-bottom: 1rem; font-size: 0.875rem;">
+                <i class="fas fa-check-circle"></i> {{ session('comment_success') }}
+            </div>
+            @endif
+
+            <form action="{{ route('comments.store') }}" method="POST">
+                @csrf
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.375rem;">
+                            Nama *
+                        </label>
+                        <input type="text" name="name" value="{{ old('name') }}"
+                            placeholder="Nama kamu"
+                            style="width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.05); border: 1px solid {{ $errors->has('name') ? 'rgba(239,68,68,0.5)' : 'rgba(255,255,255,0.1)' }}; border-radius: 0.5rem; padding: 0.625rem 0.875rem; color: #e2e8f0; font-size: 0.875rem; outline: none;"
+                            onfocus="this.style.borderColor='rgba(6,182,212,0.5)'"
+                            onblur="this.style.borderColor='rgba(255,255,255,0.1)'"
+                            required>
+                        @error('name')<p style="color:#f87171; font-size:0.75rem; margin-top:0.25rem;">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.375rem;">
+                            Email * <span style="font-size: 0.7rem; color: #475569;">(tidak ditampilkan)</span>
+                        </label>
+                        <input type="email" name="email" value="{{ old('email') }}"
+                            placeholder="email@kamu.com"
+                            style="width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.05); border: 1px solid {{ $errors->has('email') ? 'rgba(239,68,68,0.5)' : 'rgba(255,255,255,0.1)' }}; border-radius: 0.5rem; padding: 0.625rem 0.875rem; color: #e2e8f0; font-size: 0.875rem; outline: none;"
+                            onfocus="this.style.borderColor='rgba(6,182,212,0.5)'"
+                            onblur="this.style.borderColor='rgba(255,255,255,0.1)'"
+                            required>
+                        @error('email')<p style="color:#f87171; font-size:0.75rem; margin-top:0.25rem;">{{ $message }}</p>@enderror
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.375rem;">
+                        Komentar *
+                    </label>
+                    <textarea name="body" rows="4"
+                        placeholder="Tulis komentar atau feedback kamu di sini..."
+                        style="width: 100%; box-sizing: border-box; background: rgba(255,255,255,0.05); border: 1px solid {{ $errors->has('body') ? 'rgba(239,68,68,0.5)' : 'rgba(255,255,255,0.1)' }}; border-radius: 0.5rem; padding: 0.625rem 0.875rem; color: #e2e8f0; font-size: 0.875rem; outline: none; resize: vertical;"
+                        onfocus="this.style.borderColor='rgba(6,182,212,0.5)'"
+                        onblur="this.style.borderColor='rgba(255,255,255,0.1)'"
+                        required>{{ old('body') }}</textarea>
+                    @error('body')<p style="color:#f87171; font-size:0.75rem; margin-top:0.25rem;">{{ $message }}</p>@enderror
+                </div>
+
+                <button type="submit" class="btn-primary" style="font-size: 0.875rem; padding: 0.625rem 1.5rem;">
+                    <i class="fas fa-paper-plane" style="margin-right: 0.5rem;"></i>Kirim Komentar
+                </button>
+            </form>
+        </div>
+
+        {{-- List Komentar --}}
+        <div>
+            <h3 style="font-size: 1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1.25rem;">
+                <i class="fas fa-comments" style="color: #22d3ee; margin-right: 0.5rem;"></i>
+                {{ $comments->count() }} Komentar
+            </h3>
+
+            @forelse($comments as $comment)
+<div class="glass-card" style="border-radius: 0.75rem; padding: 1.25rem; margin-bottom: 1rem; {{ $comment->is_admin ? 'border-left: 3px solid rgba(6,182,212,0.4);' : '' }}" data-aos="fade-up">
+
+    {{-- Komentar Utama --}}
+    <div style="display: flex; gap: 0.875rem;">
+
+        {{-- Avatar --}}
+        @if($comment->is_admin)
+            @php $replyProfile = \App\Models\Profile::first(); @endphp
+            <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 2px solid rgba(6,182,212,0.3);">
+                @if($replyProfile && $replyProfile->photo)
+                    <img src="{{ Storage::url($replyProfile->photo) }}"
+                         alt="{{ $replyProfile->name }}"
+                         style="width: 100%; height: 100%; object-fit: cover;">
+                @else
+                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg,#06b6d4,#7c3aed); display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700; color: white;">
+                        WN
+                    </div>
+                @endif
+            </div>
+        @else
+            <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; background: linear-gradient(135deg,#475569,#334155); display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700; color: white; flex-shrink: 0;">
+                {{ strtoupper(substr($comment->name, 0, 1)) }}
+            </div>
+        @endif
+
+        <div style="flex: 1; min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.375rem; flex-wrap: wrap;">
+                <span style="font-weight: 600; color: #f1f5f9; font-size: 0.9rem;">{{ $comment->name }}</span>
+                @if($comment->is_admin)
+                <span style="background: rgba(6,182,212,0.15); color: #22d3ee; font-size: 0.65rem; padding: 0.125rem 0.5rem; border-radius: 9999px; border: 1px solid rgba(6,182,212,0.2);">
+                    Admin
+                </span>
+                @endif
+                <span style="font-size: 0.7rem; color: #475569;">{{ $comment->created_at->diffForHumans() }}</span>
+            </div>
+            <p style="color: #cbd5e1; font-size: 0.875rem; line-height: 1.6; margin: 0;">
+                {{ $comment->body }}
+            </p>
+        </div>
+    </div>
+
+    {{-- Balasan Admin (hanya untuk komentar pengunjung) --}}
+    @if(!$comment->is_admin && $comment->hasReply())
+    <div style="margin-top: 1rem; margin-left: 3.375rem; background: rgba(6,182,212,0.05); border: 1px solid rgba(6,182,212,0.15); border-radius: 0.625rem; padding: 1rem;">
+        <div style="display: flex; gap: 0.75rem;">
+            @php $replyProfile = \App\Models\Profile::first(); @endphp
+            <div style="width: 2rem; height: 2rem; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 1px solid rgba(6,182,212,0.3);">
+                @if($replyProfile && $replyProfile->photo)
+                    <img src="{{ Storage::url($replyProfile->photo) }}"
+                         alt="{{ $replyProfile->name }}"
+                         style="width: 100%; height: 100%; object-fit: cover;">
+                @else
+                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg,#06b6d4,#7c3aed); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: white;">
+                        WN
+                    </div>
+                @endif
+            </div>
+            <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.375rem;">
+                    <span style="font-weight: 600; color: #22d3ee; font-size: 0.85rem;">
+                        {{ $replyProfile->name ?? 'Wisnu Nugroho' }}
+                    </span>
+                    <span style="background: rgba(6,182,212,0.15); color: #22d3ee; font-size: 0.65rem; padding: 0.125rem 0.5rem; border-radius: 9999px; border: 1px solid rgba(6,182,212,0.2);">
+                        Admin
+                    </span>
+                    <span style="font-size: 0.7rem; color: #475569;">
+                        {{ $comment->replied_at->diffForHumans() }}
+                    </span>
+                </div>
+                <p style="color: #94a3b8; font-size: 0.875rem; line-height: 1.6; margin: 0;">
+                    {{ $comment->reply }}
+                </p>
+            </div>
+        </div>
+    </div>
+    @endif
+
+</div>
+@empty
+<div style="text-align: center; padding: 3rem 0;">
+    <i class="fas fa-comment-slash" style="font-size: 2.5rem; color: #1e293b; display: block; margin-bottom: 0.75rem;"></i>
+    <p style="color: #475569; font-size: 0.875rem;">Belum ada komentar. Jadilah yang pertama!</p>
+</div>
+@endforelse
+
+        </div>
+
     </div>
 </section>
 

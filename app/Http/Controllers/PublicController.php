@@ -18,13 +18,20 @@ class PublicController extends Controller
     }
 
     public function home()
-    {
-        $profile  = $this->getProfile();
-        $skills   = Skill::orderBy('sort_order')->take(6)->get();
-        $projects = Project::with('category')->where('is_featured', true)->take(3)->get();
+{
+    $profile  = $this->getProfile();
+    $skills   = Skill::orderBy('sort_order')->take(6)->get();
+    $projects = Project::with('category')
+                    ->where('is_featured', true)
+                    ->orderBy('sort_order')
+                    ->take(3)->get();
+    $comments = \App\Models\Comment::where('is_approved', true)
+                    ->latest()
+                    ->take(10)
+                    ->get();
 
-        return view('pages.home', compact('profile', 'skills', 'projects'));
-    }
+    return view('pages.home', compact('profile', 'skills', 'projects', 'comments'));
+}
 
     public function about()
     {

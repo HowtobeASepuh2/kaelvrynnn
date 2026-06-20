@@ -3,9 +3,22 @@
         <div style="display:flex; align-items:center; justify-content:space-between; height:4rem;">
 
             {{-- Logo --}}
-            <a href="{{ route('home') }}" class="gradient-text" style="font-size:1.25rem; font-weight:700; text-decoration:none;">
-                WN.
-            </a>
+            @php $navProfile = \App\Models\Profile::first(); @endphp
+<a href="{{ route('home') }}" style="text-decoration:none; display:flex; align-items:center; gap:0.625rem;">
+    {{-- Foto kecil di navbar --}}
+    <div style="width:2rem; height:2rem; border-radius:0.5rem; overflow:hidden; border:1px solid rgba(6,182,212,0.3); flex-shrink:0;">
+        @if($navProfile && $navProfile->photo)
+            <img src="{{ Storage::url($navProfile->photo) }}"
+                 alt="{{ $navProfile->name }}"
+                 style="width:100%; height:100%; object-fit:cover;">
+        @else
+            <div style="width:100%; height:100%; background:linear-gradient(135deg,#06b6d4,#7c3aed); display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:white;">
+                WN
+            </div>
+        @endif
+    </div>
+    <span class="gradient-text" style="font-size:1.25rem; font-weight:700;">Wisnu Nugroho</span>
+</a>
 
             {{-- Desktop Menu --}}
             <div class="hidden md:flex" style="align-items:center; gap:2rem;">

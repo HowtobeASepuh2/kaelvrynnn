@@ -6,16 +6,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Dynamic Title --}}
-    <title>@yield('title', 'Wisnu Nugroho | Graphic Designer & Creative Editor')</title>
+    <title>@yield('title', 'Wisnu Nugroho | UI/UX Designer & Creative Editor')</title>
 
     {{-- Dynamic Meta --}}
     <meta name="description" content="@yield('meta_description', 'Portofolio pribadi Wisnu Nugroho, mahasiswa Sistem Informasi yang berfokus pada desain grafis, UI/UX, content design, dan video editing.')">
-    <meta name="keywords" content="@yield('meta_keywords', 'Wisnu Nugroho, Graphic Designer, Creative Editor, UI/UX, Desain Grafis, Portofolio, Jambi')">
+    <meta name="keywords" content="@yield('meta_keywords', 'Wisnu Nugroho, UI/UX Designer, Creative Editor, UI/UX, Desain Grafis, Portofolio, Jambi')">
     <meta name="author" content="Wisnu Nugroho">
     <meta name="robots" content="index, follow">
 
     {{-- Open Graph --}}
-    <meta property="og:title" content="@yield('title', 'Wisnu Nugroho | Graphic Designer & Creative Editor')">
+    <meta property="og:title" content="@yield('title', 'Wisnu Nugroho | UI/UX Designer & Creative Editor')">
     <meta property="og:description" content="@yield('meta_description', 'Portofolio pribadi Wisnu Nugroho')">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
@@ -24,7 +24,7 @@
 
     {{-- Twitter Card --}}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@yield('title', 'Wisnu Nugroho | Graphic Designer & Creative Editor')">
+    <meta name="twitter:title" content="@yield('title', 'Wisnu Nugroho | UI/UX Designer & Creative Editor')">
     <meta name="twitter:description" content="@yield('meta_description', 'Portofolio pribadi Wisnu Nugroho')">
 
     {{-- Canonical URL --}}
