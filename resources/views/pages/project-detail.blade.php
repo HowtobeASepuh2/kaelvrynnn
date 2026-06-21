@@ -38,17 +38,35 @@
         </div>
 
         {{-- Main Thumbnail --}}
-        <div class="glass-card rounded-2xl overflow-hidden mb-8" data-aos="fade-up">
-            @if($project->thumbnail)
-                <img src="{{ \App\Support\ImageUpload::url($project->thumbnail) }}"
-                      alt="{{ $project->title }}"
-                      class="w-full object-cover max-h-[500px]" loading="lazy">
-            @else
-                <div class="w-full h-64 bg-gradient-to-br from-purple-900/40 to-cyan-900/40 flex items-center justify-center">
-                    <i class="fas fa-image text-6xl text-slate-700"></i>
-                </div>
-            @endif
+@php
+    $thumbnailUrl = $project->thumbnail
+        ? \App\Support\ImageUpload::url($project->thumbnail)
+        : null;
+@endphp
+
+<div class="glass-card rounded-2xl overflow-hidden mb-8 min-h-[420px] flex items-center justify-center" data-aos="fade-up">
+    @if($thumbnailUrl)
+        <img src="{{ $thumbnailUrl }}"
+             alt="{{ $project->title }}"
+             class="w-full h-full min-h-[420px] max-h-[520px] object-cover"
+             loading="lazy"
+             onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+
+        <div class="hidden w-full h-64 bg-gradient-to-br from-purple-900/40 to-cyan-900/40 items-center justify-center text-center">
+            <div>
+                <i class="fas fa-image text-6xl text-slate-700 mb-3"></i>
+                <p class="text-slate-500 text-sm">Gambar gagal dimuat</p>
+            </div>
         </div>
+    @else
+        <div class="w-full h-64 bg-gradient-to-br from-purple-900/40 to-cyan-900/40 flex items-center justify-center text-center">
+            <div>
+                <i class="fas fa-image text-6xl text-slate-700 mb-3"></i>
+                <p class="text-slate-500 text-sm">Gambar project belum tersedia</p>
+            </div>
+        </div>
+    @endif
+</div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
