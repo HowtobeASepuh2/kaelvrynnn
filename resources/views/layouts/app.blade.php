@@ -7,11 +7,9 @@
     <meta name="google-site-verification" content="EpxdVnoMagYQoXNjaLKTKdFTlZ98fcehcmzmpsWl9r8" />
 
     {{-- Dynamic Title --}}
-    <title>@yield('title', 'Wisnu Nugroho | UI/UX Designer & Creative Editor')</title>
-
-    {{-- Dynamic Meta --}}
-    <meta name="description" content="@yield('meta_description', 'Portofolio pribadi Wisnu Nugroho, mahasiswa Sistem Informasi yang berfokus pada desain grafis, UI/UX, content design, dan video editing.')">
-    <meta name="keywords" content="@yield('meta_keywords', 'Wisnu Nugroho, UI/UX Designer, Creative Editor, UI/UX, Desain Grafis, Portofolio, Jambi')">
+    <title>Wisnu Nugroho | Graphic Designer & Creative Editor — Jambi</title>
+    <meta name="description" content="Portofolio Wisnu Nugroho, mahasiswa Sistem Informasi Universitas Jambi yang berfokus pada desain grafis, UI/UX, content design, dan video editing.">
+    <meta name="keywords" content="Wisnu Nugroho, Graphic Designer Jambi, UI UX Designer, Desain Grafis, Portofolio Mahasiswa, Sistem Informasi UNJA">
     <meta name="author" content="Wisnu Nugroho">
     <meta name="robots" content="index, follow">
 

@@ -41,8 +41,8 @@
         <div class="glass-card rounded-2xl overflow-hidden mb-8" data-aos="fade-up">
             @if($project->thumbnail)
                 <img src="{{ \App\Support\ImageUpload::url($project->thumbnail) }}"
-                     alt="{{ $project->title }}"
-                     class="w-full object-cover max-h-[500px]" loading="lazy">
+                      alt="{{ $project->title }}"
+                      class="w-full object-cover max-h-[500px]" loading="lazy">
             @else
                 <div class="w-full h-64 bg-gradient-to-br from-purple-900/40 to-cyan-900/40 flex items-center justify-center">
                     <i class="fas fa-image text-6xl text-slate-700"></i>
