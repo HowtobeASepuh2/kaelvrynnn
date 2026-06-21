@@ -216,22 +216,6 @@ class ProjectController extends Controller
 
     public function destroy(Project $project)
     {
-        if ($project->thumbnail) {
-            ImageUpload::delete($project->thumbnail);
-        }
-
-        if ($project->og_image) {
-            ImageUpload::delete($project->og_image);
-        }
-
-        foreach ($project->images as $image) {
-            if ($image->image) {
-                ImageUpload::delete($image->image);
-            }
-
-            $image->delete();
-        }
-
         $project->delete();
 
         return back()->with('success', 'Project berhasil dihapus!');
@@ -255,10 +239,6 @@ class ProjectController extends Controller
 
     public function destroyImage(ProjectImage $image)
     {
-        if ($image->image) {
-            ImageUpload::delete($image->image);
-        }
-
         $image->delete();
 
         return back()->with('success', 'Gambar galeri berhasil dihapus.');
